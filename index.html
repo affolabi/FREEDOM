@@ -1,0 +1,4756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Freedom — A Card That Makes Money For You</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@700&family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Metroway Regular';
+      src: local('Metroway Regular'), local('Metroway-Regular'), local('Metroway'), local('Metroway Bold'),
+           url('./Metroway Regular.otf') format('opentype'),
+           url('./Metroway-Regular.otf') format('opentype'),
+           url('./Metroway Regular.ttf') format('truetype'),
+           url('./Metroway-Regular.ttf') format('truetype'),
+           url('./Metroway.otf') format('opentype'),
+           url('./Metroway.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Metroway';
+      src: local('Metroway Regular'), local('Metroway-Regular'), local('Metroway'), local('Metroway Bold'),
+           url('./Metroway Regular.otf') format('opentype'),
+           url('./Metroway-Regular.otf') format('opentype'),
+           url('./Metroway.otf') format('opentype'),
+           url('./Metroway.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --font-display: 'Plus Jakarta Sans', sans-serif;
+      --font-body: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      
+      /* Brand Color Palette: Strictly Black, White, and Red Accent (No Blue) */
+      --color-black: #0c0c0e;
+      --color-card-dark: #17171a;
+      --color-white: #ffffff;
+      --color-card-bg: #f9f9fb;
+      --color-red: #e50914;
+      
+      --border-card: #ebebed;
+      --border-card-hover: #dedee2;
+      --ink-label: #52525b;
+      --ink-muted: #71717a;
+    }
+
+    html, body {
+      width: 100%;
+      background-color: var(--color-black);
+      color: var(--color-white);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: clip;
+      scroll-behavior: smooth;
+    }
+
+    /* ================= SECTION 1: FULLSCREEN HERO STAGE ================= */
+    .hero-stage {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 720px;
+      max-height: 1080px;
+      overflow: hidden;
+      background-color: #050507;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .hero-bg video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 25%;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.2) 14%, transparent 28%),
+        radial-gradient(circle at 50% 35%, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0.35) 70%, rgba(0, 0, 0, 0.7) 100%),
+        linear-gradient(180deg, transparent 25%, rgba(0, 0, 0, 0.25) 42%, rgba(0, 0, 0, 0.65) 65%, rgba(0, 0, 0, 0.9) 85%, #000000 100%);
+    }
+
+    /* Top Global Scroll Reading Progress Bar */
+    .global-scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2.5px;
+      background: linear-gradient(90deg, #e50914 0%, #ff334b 100%);
+      transform-origin: 0% 50%;
+      transform: scaleX(0);
+      z-index: 10001;
+      pointer-events: none;
+      will-change: transform;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 76px;
+      z-index: 1000;
+      padding: 0 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  backdrop-filter 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  -webkit-backdrop-filter 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  border-bottom 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .navbar.is-scrolled {
+      background-color: rgba(12, 12, 14, 0.84);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      height: 64px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 0 20px;
+        height: 64px;
+      }
+      .navbar.is-scrolled {
+        height: 56px;
+      }
+    }
+
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #ffffff;
+      text-decoration: none;
+      flex-shrink: 0;
+      transition: opacity 0.2s ease;
+      user-select: none;
+    }
+
+    .brand-logo:hover {
+      opacity: 0.88;
+    }
+
+    .brand-logo-svg {
+      height: 28px;
+      width: auto;
+      max-width: none;
+      display: block;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+
+    .navbar-logo {
+      height: 28px;
+      width: auto;
+      flex-shrink: 0;
+    }
+
+    .brand-text {
+      font-family: 'Metroway Regular', 'Metroway', 'Antonio', 'Bebas Neue', var(--font-display), sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.015em;
+      line-height: 1;
+      text-transform: uppercase;
+      color: #ffffff;
+      white-space: nowrap;
+      display: inline-block;
+      transform: scaleY(1.10);
+      transform-origin: center center;
+      -webkit-text-stroke: 0.45px currentColor;
+      text-rendering: optimizeLegibility;
+    }
+
+    .footer-logo-link {
+      display: inline-block;
+      text-decoration: none;
+      color: #ffffff;
+      margin-bottom: 18px;
+      transition: opacity 0.2s ease;
+    }
+
+    .footer-logo-link:hover {
+      opacity: 0.85;
+    }
+
+    .brand-logo-svg path {
+      fill: currentColor;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+      margin-left: 20px;
+    }
+
+    .nav-link {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 14.5px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      position: relative;
+      padding: 6px 0;
+      transition: color 0.25s ease, opacity 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover {
+      color: #ffffff;
+      opacity: 1;
+    }
+
+    .nav-link.is-active {
+      color: #ffffff;
+      opacity: 1;
+      font-weight: 600;
+    }
+
+    .nav-link.is-active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: #e50914;
+      border-radius: 9999px;
+      animation: navUnderlineIn 0.25s ease forwards;
+    }
+
+    @keyframes navUnderlineIn {
+      from { transform: scaleX(0); opacity: 0; }
+      to { transform: scaleX(1); opacity: 1; }
+    }
+
+    .nav-right-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .nav-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #ffffff;
+      color: #050505;
+      padding: 6.5px 8px 6.5px 16px;
+      border-radius: 9999px;
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      flex-shrink: 0;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+      white-space: nowrap;
+    }
+
+    .nav-action-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(255, 255, 255, 0.22);
+      background: #f7f7f8;
+    }
+
+    .nav-btn-arrow {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #000000;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.2s ease;
+    }
+
+    .nav-action-btn:hover .nav-btn-arrow {
+      transform: translate(1px, -1px);
+    }
+
+    /* Mobile Hamburger Button */
+    .nav-hamburger {
+      display: none;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 50%;
+      cursor: pointer;
+      position: relative;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 0;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+      z-index: 1001;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .nav-hamburger:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .hamburger-line {
+      display: block;
+      width: 17px;
+      height: 1.5px;
+      background-color: #ffffff;
+      border-radius: 2px;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+      transform-origin: center;
+    }
+
+    .nav-hamburger.is-active .hamburger-line:nth-child(1) {
+      transform: translateY(3.25px) rotate(45deg);
+    }
+
+    .nav-hamburger.is-active .hamburger-line:nth-child(2) {
+      transform: translateY(-3.25px) rotate(-45deg);
+    }
+
+    /* Mobile Nav Drawer Overlay */
+    .mobile-nav-drawer {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      pointer-events: none;
+      visibility: hidden;
+      transition: visibility 0.35s ease;
+    }
+
+    .mobile-nav-drawer.is-open {
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    .mobile-nav-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(4, 4, 6, 0.72);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      opacity: 0;
+      transition: opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .mobile-nav-drawer.is-open .mobile-nav-backdrop {
+      opacity: 1;
+    }
+
+    .mobile-nav-panel {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(12, 12, 14, 0.97);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.85);
+      padding: clamp(76px, 11vh, 92px) 24px 28px;
+      transform: translateY(-100%);
+      transition: transform 0.36s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+
+    .mobile-nav-drawer.is-open .mobile-nav-panel {
+      transform: translateY(0);
+    }
+
+    .mobile-nav-links {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 24px;
+    }
+
+    .mobile-nav-link {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration: none;
+      transition: color 0.2s ease, padding-left 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .mobile-nav-link:hover,
+    .mobile-nav-link:active {
+      color: #ffffff;
+      padding-left: 6px;
+    }
+
+    .mobile-nav-num {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.35);
+      letter-spacing: 0.06em;
+    }
+
+    .mobile-nav-title {
+      font-family: var(--font-display);
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .mobile-nav-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .mobile-nav-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: #ffffff;
+      color: #0c0c0e;
+      padding: 13px 20px;
+      border-radius: 9999px;
+      text-decoration: none;
+      font-size: 14.5px;
+      font-weight: 600;
+      font-family: var(--font-display);
+      letter-spacing: -0.01em;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .mobile-nav-sublink {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: rgba(255, 255, 255, 0.55);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 0;
+      transition: color 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .mobile-nav-sublink:hover {
+      color: #ffffff;
+    }
+
+    body.mobile-nav-locked {
+      overflow: hidden !important;
+    }
+
+    @media (max-width: 960px) {
+      .nav-links {
+        display: none;
+      }
+      .nav-hamburger {
+        display: flex;
+      }
+    }
+
+    /* Main Hero Text */
+    .hero-body {
+      position: absolute;
+      top: 46%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 1200px;
+      padding: 0 24px;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .heading-top {
+      font-family: var(--font-display);
+      font-size: clamp(34px, 4.4vw, 58px);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      color: #ffffff;
+      margin-bottom: 0px;
+    }
+
+    .heading-main {
+      font-family: var(--font-display);
+      font-size: clamp(56px, 8.4vw, 114px);
+      font-weight: 800;
+      letter-spacing: -0.038em;
+      line-height: 0.98;
+      color: #ffffff;
+      margin-top: 0px;
+      margin-bottom: 22px;
+    }
+
+    .hero-subtext {
+      font-family: var(--font-body);
+      font-size: clamp(15px, 1.45vw, 18.5px);
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.9);
+      letter-spacing: -0.015em;
+      max-width: 760px;
+      line-height: 1.45;
+      margin-bottom: 34px;
+    }
+
+    .cta-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(24, 24, 27, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+      padding: 11px 12px 11px 22px;
+      border-radius: 9999px;
+      text-decoration: none;
+      font-size: 14.5px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    }
+
+    .btn-card:hover {
+      background: rgba(38, 38, 42, 0.95);
+      border-color: rgba(255, 255, 255, 0.28);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6);
+    }
+
+    .btn-card-circle {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #ffffff;
+      color: #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.25s ease;
+    }
+
+    .btn-card:hover .btn-card-circle {
+      transform: translate(1px, -1px);
+    }
+
+    .btn-business {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      color: #0c0c0e;
+      padding: 13px 26px;
+      border-radius: 9999px;
+      text-decoration: none;
+      font-size: 14.5px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .btn-business:hover {
+      background: #f2f2f3;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(255, 255, 255, 0.2);
+    }
+
+    .hero-ticker-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 52px;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000000;
+    }
+
+    .ticker-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255, 255, 255, 0.95);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .ticker-red-square {
+      width: 7.5px;
+      height: 7.5px;
+      background-color: var(--color-red);
+      border-radius: 1px;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+
+
+    /* ================= SECTION 1.5: CURRENCY STREAM SCROLL (MOTO-CARD STYLE) ================= */
+    .section-currency-scroll {
+      position: relative;
+      width: 100%;
+      height: 290vh; /* Smooth, generous scroll track for pinning */
+      background-color: #ededf0;
+      z-index: 15;
+    }
+
+    .currency-sticky-viewport {
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 50%, #f7f8fa 0%, #ebecee 65%, #e4e5e8 100%);
+      -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.85) 12%, black 22%, black 78%, rgba(0, 0, 0, 0.85) 88%, transparent 100%);
+      mask-image: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.85) 12%, black 22%, black 78%, rgba(0, 0, 0, 0.85) 88%, transparent 100%);
+    }
+
+    /* Currency Columns */
+    .currency-tracks-container {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .currency-track {
+      position: absolute;
+      top: -25vh;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      width: 320px;
+      will-change: transform;
+    }
+
+    .currency-track.is-left {
+      right: calc(50% + 19rem);
+      text-align: right;
+    }
+
+    .currency-track.is-right {
+      left: calc(50% + 19rem);
+      text-align: left;
+    }
+
+    .currency-number-item {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 2.8vw, 42px);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      white-space: nowrap;
+      user-select: none;
+      will-change: transform;
+      /* Silvery metallic gradient text matching moto-card */
+      background: linear-gradient(135deg, rgba(165, 172, 178, 0.55) 0%, rgba(225, 230, 233, 0.92) 45%, rgba(150, 158, 164, 0.5) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Varied opacities for depth */
+    .currency-number-item:nth-child(3n+1) { opacity: 0.85; }
+    .currency-number-item:nth-child(3n+2) { opacity: 0.45; }
+    .currency-number-item:nth-child(3n)   { opacity: 0.65; }
+
+    /* Center Content Stage - positioned cleanly in-between the tracks */
+    .currency-center-stage {
+      position: relative;
+      z-index: 25;
+      width: 100%;
+      max-width: 520px;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 180px;
+      pointer-events: none;
+    }
+
+    .currency-msg-box {
+      position: absolute;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      will-change: transform, opacity, filter;
+    }
+
+    /* Phase 1 Heading: Clean, refined size in-between columns (not oversized) */
+    .currency-headline {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 2.6vw, 36px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.18;
+      color: rgba(18, 18, 22, 0.90); /* 90% black */
+      text-transform: uppercase;
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    /* Phase 2 Features List: Refined, medium weight, 90% black, matching moto-card reference */
+    .currency-msg-box.msg-phase-2 {
+      opacity: 0;
+      transform: translate3d(0, 36px, 0);
+      filter: blur(8px);
+    }
+
+    .currency-features-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .currency-feature-line {
+      font-family: var(--font-display);
+      font-size: clamp(19px, 1.8vw, 24px);
+      font-weight: 500;
+      letter-spacing: -0.015em;
+      line-height: 1.45;
+      color: rgba(18, 18, 22, 0.90); /* 90% black */
+      white-space: nowrap;
+    }
+
+    @media (max-width: 1200px) {
+      .currency-track.is-left {
+        right: calc(50% + 14rem);
+      }
+      .currency-track.is-right {
+        left: calc(50% + 14rem);
+      }
+      .currency-headline {
+        font-size: 26px;
+      }
+      .currency-feature-line {
+        font-size: 19px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .currency-track.is-left {
+        right: calc(50% + 7rem);
+        opacity: 0.35;
+      }
+      .currency-track.is-right {
+        left: calc(50% + 7rem);
+        opacity: 0.35;
+      }
+      .currency-number-item {
+        font-size: 20px;
+      }
+      .currency-headline {
+        font-size: 20px;
+        white-space: normal;
+      }
+      .currency-feature-line {
+        font-size: 16px;
+        white-space: normal;
+      }
+    }
+
+    /* ================= SECTION 2: HOW IT WORKS (PINNED DISSOLVE STAGE) ================= */
+    .section-how-pinned {
+      position: relative;
+      width: 100%;
+      height: 480vh; /* Smooth, continuous runway across the 3 dissolving steps */
+      background-color: #070709;
+      color: #ffffff;
+      z-index: 25;
+    }
+
+    .how-sticky-viewport {
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #070709;
+    }
+
+    .step-pane {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      will-change: opacity, transform;
+    }
+
+    .step-pane.is-active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Left half background: Solid Black */
+    .step-pane-left-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 55%;
+      height: 100%;
+      background: #000000;
+      z-index: 1;
+    }
+
+    /* Right half background & visual: Fills the white/grey space so it's not empty */
+    .step-pane-right-visual {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 45%;
+      height: 100%;
+      background: #d9d9d9;
+      z-index: 2;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-split-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center bottom;
+      display: block;
+      will-change: transform;
+    }
+
+    .step-pane[data-step="3"] .step-split-img {
+      object-fit: contain;
+      object-position: center center;
+      padding: clamp(24px, 4vw, 48px);
+      box-sizing: border-box;
+    }
+
+    /* Stage 1: Pinned Content (Left 55%) */
+    .step-stage-1 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 55%;
+      height: 100%;
+      z-index: 5;
+      padding: clamp(36px, 5.5vh, 64px) clamp(32px, 4vw, 64px);
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      will-change: transform, opacity;
+      pointer-events: none;
+    }
+
+    .step-stage1-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 100%;
+      flex-grow: 1;
+    }
+
+    .step-stage1-header {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .step-premise-block {
+      margin-bottom: clamp(32px, 5vh, 56px);
+      width: 100%;
+    }
+
+    .step-premise {
+      font-family: var(--font-display);
+      font-size: clamp(38px, 4.8vw, 68px);
+      font-weight: 800;
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .step-premise span {
+      display: block;
+    }
+
+    .step-stage1-action-group {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .step-stage1-title {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .step-title-action {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 3.4vw, 44px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .step-title-sub {
+      font-family: var(--font-display);
+      font-size: clamp(17px, 1.8vw, 22px);
+      font-weight: 500;
+      line-height: 1.35;
+      letter-spacing: -0.015em;
+      color: rgba(255, 255, 255, 0.7);
+      display: block;
+      margin-top: 8px;
+      max-width: 480px;
+    }
+
+    /* Scaling for Step 2 and Step 3 where 3 things premise is not shown */
+    .step-pane:not([data-step="1"]) .step-title-action {
+      font-size: clamp(38px, 5.2vw, 64px);
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+    }
+
+    .step-pane:not([data-step="1"]) .step-title-sub {
+      font-size: clamp(19px, 2.2vw, 26px);
+      line-height: 1.3;
+      color: rgba(255, 255, 255, 0.75);
+      margin-top: 14px;
+      max-width: 500px;
+    }
+
+    .step-stage1-bottom {
+      display: flex;
+      align-items: flex-end;
+      width: 100%;
+      padding-top: 20px;
+    }
+
+    .step-feature-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 0;
+      margin: 0;
+    }
+
+    .step-feature-bullets li {
+      font-family: var(--font-display);
+      font-size: clamp(14px, 1.4vw, 17px);
+      font-weight: 500;
+      letter-spacing: -0.015em;
+      color: rgba(255, 255, 255, 0.85);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-feature-bullets li::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--color-red);
+      flex-shrink: 0;
+    }
+
+    /* Stage 2: Kinetic Dual-Column Scrub (Left 55% Text Animation) */
+    .step-stage-2 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 55%;
+      height: 100%;
+      z-index: 6;
+      opacity: 0;
+      pointer-events: none;
+      will-change: transform, opacity;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-medallion-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(280px, 55%);
+      height: min(280px, 55%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0.12;
+      will-change: transform;
+    }
+
+    .step-medallion-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .step-kinetic-columns {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      padding: clamp(36px, 5.5vh, 64px) clamp(28px, 3.5vw, 52px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+    }
+
+    .step-column.is-left {
+      width: 44%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: clamp(12px, 2.2vh, 24px);
+      text-align: left;
+    }
+
+    .step-item-wrap.is-left {
+      overflow: visible;
+      transform-origin: top left;
+    }
+
+    .step-line.is-left {
+      font-family: var(--font-display);
+      font-size: clamp(13px, 1.35vw, 18px);
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      line-height: 1.25;
+      color: rgba(255, 255, 255, 0.88);
+      white-space: nowrap;
+      transform-origin: top left;
+      will-change: transform, opacity;
+    }
+
+    .step-column.is-right {
+      width: 54%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
+      gap: clamp(12px, 2.2vh, 24px);
+      text-align: right;
+    }
+
+    .step-item-wrap.is-right {
+      overflow: visible;
+      transform-origin: bottom right;
+    }
+
+    .step-line.is-right {
+      font-family: var(--font-display);
+      font-size: clamp(15px, 1.7vw, 24px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      text-transform: uppercase;
+      color: #ffffff;
+      white-space: nowrap;
+      transform-origin: bottom right;
+      will-change: transform, opacity;
+      background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.95) 50%, rgba(210, 215, 225, 0.8) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 880px) {
+      .step-pane-left-bg {
+        width: 100%;
+        height: 55%;
+      }
+      .step-pane-right-visual {
+        width: 100%;
+        top: auto;
+        bottom: 0;
+        height: 45%;
+      }
+      .step-stage-1, .step-stage-2 {
+        width: 100%;
+        height: 55%;
+        padding: 24px 20px;
+      }
+      .step-premise {
+        font-size: 28px;
+        line-height: 1.05;
+      }
+      .step-premise-block {
+        margin-bottom: 12px;
+      }
+      .step-title-action {
+        font-size: 22px;
+      }
+      .step-title-sub {
+        font-size: 14px;
+        margin-top: 4px;
+      }
+      .step-pane:not([data-step="1"]) .step-title-action {
+        font-size: 28px;
+      }
+      .step-pane:not([data-step="1"]) .step-title-sub {
+        font-size: 15px;
+      }
+      .step-feature-bullets li {
+        font-size: 13px;
+      }
+      .step-kinetic-columns {
+        flex-direction: column;
+        justify-content: center;
+        gap: 16px;
+      }
+      .step-column.is-left, .step-column.is-right {
+        width: 100%;
+        align-items: flex-start;
+        text-align: left;
+      }
+      .step-line.is-left {
+        font-size: 13px;
+      }
+      .step-line.is-right {
+        font-size: 16px;
+      }
+    }
+
+    /* ========================================================
+       SECTION 4: THE CARDS — CINEMATIC AUTO-LOOP PAN
+       Aesthetic: Pure High-Fashion Editorial Imagery with Seamless Automatic Loop
+       ======================================================== */
+    .section-cards-editorial {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      background: #060608;
+      color: #fff;
+      user-select: none;
+      -webkit-user-select: none;
+      cursor: default;
+    }
+
+    /* ---- PANORAMIC CAMERA VIEWPORT ---- */
+    .cards-pan-viewport {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    /* Multi-Edition Track: 400vw for 4 frames (0: Checker, 1: Classic, 2: Premium, 3: Checker clone) */
+    .cards-pan-track {
+      display: flex;
+      width: 400vw;
+      height: 100%;
+      will-change: transform;
+      transform: translate3d(0, 0, 0);
+      transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
+    }
+
+    /* ---- PANORAMIC FRAMES ---- */
+    .cards-pan-frame {
+      position: relative;
+      width: 100vw;
+      height: 100%;
+      flex-shrink: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cards-frame-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .cards-frame-visual {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      will-change: transform, filter;
+      transform: scale(1.05);
+      filter: brightness(0.4) contrast(0.95);
+      transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.3, 1), filter 0.5s ease;
+    }
+
+    .cards-pan-frame.is-active .cards-frame-visual {
+      transform: scale(1);
+      filter: brightness(0.95) contrast(1.03);
+    }
+
+    /* Image zoom motion */
+    .cards-pan-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+      display: block;
+      pointer-events: none;
+      will-change: transform;
+      transform: scale(1) translate3d(0, 0, 0);
+      transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
+    }
+
+    .cards-pan-frame.is-active .cards-pan-img {
+      transform: scale(1.035) translate3d(0, 0, 0);
+      transition: transform 2.5s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    /* ---- CINEMATIC VIGNETTE & LIGHTING SCRIMS (Soft edge framing for text contrast) ---- */
+    .cards-cinematic-vignette {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+      background: 
+        radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 45%, rgba(0,0,0,0.5) 100%),
+        linear-gradient(180deg, rgba(6,6,8,0.7) 0%, rgba(6,6,8,0) 24%, rgba(6,6,8,0) 65%, rgba(6,6,8,0.85) 100%);
+    }
+
+    /* ---- PINNED HEADER TEXT (top-left) ---- */
+    .cards-ed-header {
+      position: absolute;
+      top: clamp(80px, 12vh, 140px);
+      left: clamp(32px, 5vw, 80px);
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .cards-ed-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.65);
+      margin-bottom: 12px;
+    }
+
+    .cards-kicker-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #e50914;
+      display: inline-block;
+      box-shadow: 0 0 10px rgba(229, 9, 20, 0.8);
+      animation: marketPulse 2s ease-in-out infinite;
+    }
+
+    .cards-ed-title {
+      font-family: var(--font-display);
+      font-size: clamp(34px, 5.2vw, 64px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      color: #ffffff;
+      text-shadow: 0 4px 28px rgba(0, 0, 0, 0.65);
+    }
+
+    /* ---- EDITION TEXT (bottom-left) ---- */
+    .cards-ed-info {
+      position: absolute;
+      bottom: clamp(90px, 14vh, 140px);
+      left: clamp(32px, 5vw, 80px);
+      z-index: 10;
+      max-width: 440px;
+      pointer-events: none;
+    }
+
+    .cards-ed-name-clip {
+      display: block;
+      overflow: hidden;
+      padding-bottom: 2px;
+    }
+
+    .cards-ed-name-text {
+      display: block;
+      font-family: var(--font-display);
+      font-size: clamp(24px, 3.4vw, 40px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      line-height: 1.1;
+      transform: translateY(115%);
+      transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .cards-ed-name-clip.is-visible .cards-ed-name-text {
+      transform: translateY(0);
+    }
+
+    .cards-ed-desc {
+      font-family: var(--font-body);
+      font-size: clamp(14px, 1.55vw, 17.5px);
+      font-weight: 400;
+      line-height: 1.55;
+      color: rgba(255, 255, 255, 0.72);
+      margin-top: 10px;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.5s ease 0.15s, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
+      text-shadow: 0 2px 16px rgba(0, 0, 0, 0.65);
+    }
+
+    .cards-ed-desc.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---- EDITION COUNTER (bottom-right) ---- */
+    .cards-ed-counter {
+      position: absolute;
+      bottom: clamp(90px, 14vh, 140px);
+      right: clamp(32px, 5vw, 80px);
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .cards-counter-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      font-family: var(--font-display);
+    }
+
+    .cards-ed-counter-current {
+      font-size: clamp(40px, 5vw, 56px);
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .cards-counter-divider {
+      font-size: 18px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    .cards-counter-total {
+      font-size: 18px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.45);
+      letter-spacing: 0.08em;
+    }
+
+    /* ---- PILL TABS (bottom center) ---- */
+    .cards-ed-pills {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      z-index: 10;
+      background: rgba(14, 14, 18, 0.55);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 100px;
+      padding: 5px 6px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .cards-ed-pill {
+      position: relative;
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.5);
+      background: transparent;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: color 0.3s ease, background 0.3s ease;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .cards-ed-pill:hover {
+      color: #ffffff;
+    }
+
+    .cards-ed-pill.is-active {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .cards-pill-text {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Auto-play progress fill behind pill text */
+    .cards-ed-pill-progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 0%;
+      background: rgba(255, 255, 255, 0.16);
+      border-radius: 100px;
+      transition: none;
+      z-index: 1;
+    }
+
+    .cards-ed-pill.is-active .cards-ed-pill-progress {
+      transition: width linear;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .cards-ed-header {
+        top: clamp(64px, 9vh, 90px);
+        left: 20px;
+      }
+      .cards-ed-info {
+        bottom: clamp(84px, 12vh, 110px);
+        left: 20px;
+        right: 20px;
+        max-width: none;
+      }
+      .cards-ed-counter {
+        display: none;
+      }
+      .cards-ed-pills {
+        bottom: 20px;
+        gap: 4px;
+        padding: 4px 5px;
+      }
+      .cards-ed-pill {
+        font-size: 12px;
+        padding: 8px 16px;
+      }
+    }
+
+    /* ========================================================
+       SECTION 5: FOR BUSINESSES — LUXURY BENTO GRID
+       Aesthetic: Clean Off-White, Soft Neutral Grey Cards & Editorial Typography
+       ======================================================== */
+    .section-business {
+      position: relative;
+      width: 100%;
+      background-color: #f8f8fa;
+      color: #0c0c0e;
+      padding: clamp(90px, 13vh, 150px) clamp(24px, 5vw, 64px);
+      border-top: 1px solid #e5e5e7;
+      overflow: hidden;
+      z-index: 20;
+    }
+
+    .biz-container {
+      max-width: 1180px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Centered Header */
+    .biz-header-centered {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: clamp(48px, 6vh, 64px);
+    }
+
+    .biz-pill-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #ececed;
+      color: #52525b;
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 9999px;
+      margin-bottom: 18px;
+    }
+
+    .biz-main-title {
+      font-family: var(--font-display);
+      font-size: clamp(34px, 4.4vw, 56px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.035em;
+      color: #0c0c0e;
+      margin-bottom: 14px;
+    }
+
+    .biz-main-subtitle {
+      font-family: var(--font-body);
+      font-size: clamp(15px, 1.25vw, 17.5px);
+      font-weight: 400;
+      line-height: 1.55;
+      color: #64646e;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* Bento Grid (3-Columns, 2-Rows) */
+    .biz-bento-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr 1fr;
+      grid-template-rows: minmax(240px, auto) minmax(240px, auto);
+      gap: 20px;
+      width: 100%;
+      margin-bottom: 0;
+    }
+
+    .biz-bento-card {
+      background-color: #ededef;
+      border-radius: 28px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
+    }
+
+    .biz-bento-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Card 1: Tall Card on Left (spans 2 rows) */
+    .biz-card-tall {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .biz-tall-visual-wrap {
+      background: #ffffff;
+      border-radius: 20px;
+      height: 270px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    .biz-tall-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center bottom;
+      display: block;
+    }
+
+    .biz-tall-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 24px;
+    }
+
+    .biz-tall-title {
+      font-family: var(--font-display);
+      font-size: clamp(20px, 1.8vw, 24px);
+      line-height: 1.25;
+      letter-spacing: -0.025em;
+      color: #0c0c0e;
+    }
+
+    .biz-tall-title strong {
+      font-weight: 700;
+      color: #0c0c0e;
+    }
+
+    .biz-tall-desc {
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.55;
+      color: #64646e;
+      margin-top: 8px;
+    }
+
+    /* Pill Button with White Circle Arrow */
+    .biz-pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      background: #0c0c0e;
+      color: #ffffff;
+      padding: 6px 6px 6px 22px;
+      border-radius: 9999px;
+      font-family: var(--font-display);
+      font-size: 13.5px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      text-decoration: none;
+      transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .biz-pill-btn:hover {
+      background: #27272a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .biz-pill-arrow-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #ffffff;
+      color: #0c0c0e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.25s ease;
+    }
+
+    .biz-pill-btn:hover .biz-pill-arrow-circle {
+      transform: translate(1px, -1px);
+    }
+
+    /* Card 2: Top Middle Card */
+    .biz-card-handshake {
+      grid-column: 2;
+      grid-row: 1;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .biz-card-img-wrap {
+      width: 100%;
+      height: 135px;
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .biz-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    /* Duo Text (Bold Lead + Muted Trailing) */
+    .biz-duo-text {
+      font-family: var(--font-display);
+      font-size: clamp(17px, 1.35vw, 19.5px);
+      line-height: 1.35;
+      letter-spacing: -0.02em;
+    }
+
+    .biz-duo-text strong {
+      font-weight: 700;
+      color: #0c0c0e;
+    }
+
+    .biz-muted-text {
+      font-family: var(--font-body);
+      font-weight: 400;
+      color: #82828c;
+    }
+
+    /* Card 3: Top Right Card (Stat + Crown Chess) */
+    .biz-card-stat {
+      grid-column: 3;
+      grid-row: 1;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .biz-stat-split {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .biz-stat-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .biz-stat-number {
+      font-family: var(--font-display);
+      font-size: clamp(38px, 3.4vw, 48px);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      line-height: 1;
+      color: #0c0c0e;
+    }
+
+    .biz-stat-sublabel {
+      font-family: var(--font-body);
+      font-size: 12px;
+      color: #71717a;
+      line-height: 1.3;
+    }
+
+    .biz-chess-img-wrap {
+      width: 78px;
+      height: 98px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .biz-chess-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* Card 4: Bottom Wide Card (Spans 2 columns) */
+    .biz-card-wide {
+      grid-column: 2 / span 2;
+      grid-row: 2;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      align-items: center;
+      overflow: hidden;
+      min-height: 220px;
+    }
+
+    .biz-wide-content {
+      padding: 32px;
+    }
+
+    .biz-wide-text {
+      font-family: var(--font-display);
+      font-size: clamp(18px, 1.5vw, 22px);
+      line-height: 1.35;
+      letter-spacing: -0.025em;
+    }
+
+    .biz-wide-text strong {
+      font-weight: 700;
+      color: #0c0c0e;
+    }
+
+    .biz-wide-visual {
+      height: 100%;
+      min-height: 220px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+
+    .biz-wide-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+      display: block;
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .biz-bento-grid {
+        grid-template-columns: 1fr;
+      }
+      .biz-card-tall {
+        grid-column: 1;
+        grid-row: auto;
+      }
+      .biz-card-handshake {
+        grid-column: 1;
+        grid-row: auto;
+      }
+      .biz-card-stat {
+        grid-column: 1;
+        grid-row: auto;
+      }
+      .biz-card-wide {
+        grid-column: 1;
+        grid-row: auto;
+        grid-template-columns: 1fr;
+      }
+      .biz-wide-visual {
+        height: 220px;
+      }
+    }
+
+    /* ========================================================
+       SECTION 6: FOOTER
+       ======================================================== */
+    .freedom-footer {
+      position: relative;
+      width: 100%;
+      background-color: #040405;
+      color: rgba(255, 255, 255, 0.6);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding: clamp(64px, 8vh, 96px) clamp(24px, 5vw, 64px) 40px;
+      z-index: 20;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 48px;
+      flex-wrap: wrap;
+      margin-bottom: 64px;
+    }
+
+    .footer-brand {
+      max-width: 340px;
+    }
+
+    .footer-logo {
+      height: 42px;
+      width: auto;
+      max-width: none;
+      overflow: visible;
+      flex-shrink: 0;
+      color: #ffffff;
+      margin-bottom: 18px;
+    }
+
+    .footer-tagline {
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .footer-links-group {
+      display: flex;
+      gap: clamp(36px, 5vw, 72px);
+      flex-wrap: wrap;
+    }
+
+    .footer-col {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-col-title {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+
+    .footer-col a {
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-col a:hover {
+      color: #ffffff;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-legal {
+      font-size: 12px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.35);
+      max-width: 800px;
+    }
+
+    /* ========================================================
+       SECTION 6: THE MARKET — EDITORIAL BROADSHEET
+       Theme: Crisp Luxury White & Deep Editorial Ink
+       ======================================================== */
+    .section-market {
+      position: relative;
+      width: 100%;
+      background-color: #ffffff;
+      color: #0c0c0e;
+      padding: clamp(96px, 12vh, 150px) clamp(24px, 5vw, 64px);
+      border-top: 1px solid #000000;
+      border-bottom: 1px solid #000000;
+      overflow: hidden;
+      z-index: 20;
+    }
+
+    .market-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Editorial Headline Spread (Asymmetrical 2-Column Grid) */
+    .market-editorial-header {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: clamp(36px, 6vw, 72px);
+      align-items: end;
+      margin-bottom: clamp(48px, 6vh, 64px);
+    }
+
+    .market-editorial-col-left {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .market-title {
+      font-family: var(--font-display);
+      font-size: clamp(38px, 5.2vw, 68px);
+      font-weight: 800;
+      line-height: 1.04;
+      letter-spacing: -0.04em;
+      color: #0c0c0e;
+      max-width: 620px;
+    }
+
+    .market-editorial-col-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 24px;
+    }
+
+    .market-lead {
+      font-family: var(--font-body);
+      font-size: clamp(15.5px, 1.4vw, 18.5px);
+      font-weight: 400;
+      line-height: 1.58;
+      color: #27272a;
+      max-width: 480px;
+    }
+
+    /* Magazine CTA Button */
+    .market-editorial-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      height: 48px;
+      padding: 0 28px;
+      border-radius: 9999px;
+      background: #0c0c0e;
+      color: #ffffff;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      text-decoration: none;
+      transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+      white-space: nowrap;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .market-editorial-cta:hover {
+      background: #27272a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+    }
+
+    .market-cta-arrow {
+      transition: transform 0.25s ease;
+    }
+
+    .market-editorial-cta:hover .market-cta-arrow {
+      transform: translate(2px, -2px);
+    }
+
+    /* ========================================================
+       COINBASE-STYLE MARKET UPDATE & SHOPS HUB
+       ======================================================== */
+    .cb-market-hub {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* Sub-Section Title Row */
+    .cb-section-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .cb-section-title {
+      font-family: var(--font-display);
+      font-size: clamp(22px, 2.5vw, 26px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #0a0b0d;
+      margin: 0;
+    }
+
+    .cb-circle-arrow-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #f2f4f7;
+      color: #0a0b0d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .cb-circle-arrow-btn:hover {
+      background: #e4e7ec;
+      transform: translateX(2px);
+    }
+
+    /* 1. Market Update Grid (Matches Mobile & Desktop Screenshot) */
+    .cb-market-update-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 16px;
+    }
+
+    .cb-card {
+      background: #f2f4f7;
+      border-radius: 22px;
+      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, 0.03);
+      transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .cb-card:hover {
+      background: #ebedf2;
+    }
+
+    .cb-card-hero {
+      padding: 22px 24px 14px 24px;
+      min-height: 220px;
+      justify-content: space-between;
+    }
+
+    .cb-side-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .cb-card-mini {
+      flex: 1;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .cb-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .cb-card-label {
+      font-family: var(--font-display);
+      font-size: 14.5px;
+      font-weight: 600;
+      color: #5b616e;
+      letter-spacing: -0.01em;
+    }
+
+    .cb-chevron {
+      color: #5b616e;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .cb-card:hover .cb-chevron {
+      color: #0a0b0d;
+      transform: translateX(2px);
+    }
+
+    .cb-card-metric {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .cb-metric-val {
+      font-family: var(--font-display);
+      font-size: clamp(22px, 2.4vw, 28px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #0a0b0d;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cb-metric-change {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-family: var(--font-display);
+      font-size: 14.5px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cb-metric-change.up {
+      color: #098551;
+    }
+
+    .cb-metric-change.down {
+      color: #cf202f;
+    }
+
+    /* Sparkline with Signature Dotted Grid */
+    .cb-sparkline-wrap {
+      width: 100%;
+      height: 105px;
+      margin-top: 10px;
+      position: relative;
+    }
+
+    .cb-sparkline-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      overflow: visible;
+    }
+
+    /* 2. Shops Carousel / Cards ("New on Coinbase" style) */
+    .cb-shops-section {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cb-shops-carousel {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      width: 100%;
+    }
+
+    .cb-shop-card {
+      background: #f2f4f7;
+      border-radius: 20px;
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      border: 1px solid rgba(0, 0, 0, 0.03);
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      position: relative;
+    }
+
+    .cb-shop-card:hover {
+      transform: translateY(-3px);
+      background: #e9ecf2;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    .cb-shop-card.active {
+      background: #ffffff;
+      border: 2px solid #0a0b0d;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      transform: translateY(-3px);
+    }
+
+    .cb-shop-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    }
+
+    .cb-shop-ticker {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: #5b616e;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    .cb-shop-price {
+      font-family: var(--font-display);
+      font-size: clamp(17px, 1.4vw, 19px);
+      font-weight: 800;
+      color: #0a0b0d;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cb-shop-change {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 6px;
+    }
+
+    .cb-shop-change.up {
+      color: #098551;
+    }
+
+    .cb-shop-change.down {
+      color: #cf202f;
+    }
+
+    .cb-shop-cap {
+      font-family: var(--font-display);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #8f96a3;
+      letter-spacing: -0.01em;
+    }
+
+    /* Colophon / Hub Footer */
+    .cb-market-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 18px;
+      border-top: 1px solid #ebebed;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .cb-footer-left {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .cb-timestamp {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      color: #0a0b0d;
+    }
+
+    .cb-footer-sep {
+      color: #c4c4c8;
+      font-size: 12px;
+    }
+
+    .cb-footer-note {
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: #5b616e;
+    }
+
+    .cb-footer-link {
+      font-family: var(--font-display);
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #0a0b0d;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1.5px solid #0a0b0d;
+      padding-bottom: 2px;
+      transition: opacity 0.2s ease;
+    }
+
+    .cb-footer-link:hover {
+      opacity: 0.65;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 992px) {
+      .cb-shops-carousel {
+        display: flex;
+        overflow-x: auto;
+        padding-bottom: 12px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+      }
+      .cb-shop-card {
+        flex: 0 0 148px;
+        scroll-snap-align: start;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .market-editorial-header {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .cb-market-update-grid {
+        grid-template-columns: 1.05fr 1fr;
+        gap: 10px;
+      }
+      .cb-card {
+        padding: 16px 14px;
+        border-radius: 18px;
+      }
+      .cb-card-hero {
+        padding: 16px 14px 10px 14px;
+      }
+      .cb-card-label {
+        font-size: 13px;
+      }
+      .cb-metric-val {
+        font-size: 18px;
+      }
+      .cb-metric-change {
+        font-size: 12px;
+      }
+      .cb-sparkline-wrap {
+        height: 75px;
+      }
+      .cb-side-stack {
+        gap: 10px;
+      }
+      .cb-market-footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 440px) {
+      .cb-market-update-grid {
+        grid-template-columns: 1fr;
+      }
+      .cb-sparkline-wrap {
+        height: 90px;
+      }
+    }
+
+    /* ========================================================
+       SECTION 7: FAQ — EDITORIAL MAGAZINE LAYOUT
+       "What you should know before you tap."
+       Theme: Minimalist Editorial Broadsheet
+       ======================================================== */
+    .section-faq {
+      position: relative;
+      width: 100%;
+      background-color: #0c0c0e;
+      color: #ffffff;
+      padding: clamp(80px, 12vh, 140px) clamp(24px, 5vw, 64px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      z-index: 20;
+    }
+
+    .faq-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .faq-layout {
+      display: grid;
+      grid-template-columns: minmax(320px, 420px) 1fr;
+      gap: clamp(48px, 6vw, 96px);
+      align-items: flex-start;
+    }
+
+    .faq-sidebar {
+      position: sticky;
+      top: 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .faq-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .faq-kicker-mark {
+      width: 7px;
+      height: 7px;
+      background: #e50914; /* Signature Freedom red square */
+      display: inline-block;
+    }
+
+    .faq-headline {
+      font-family: var(--font-display);
+      font-size: clamp(34px, 4.2vw, 56px);
+      font-weight: 800;
+      line-height: 1.06;
+      letter-spacing: -0.035em;
+      color: #ffffff;
+    }
+
+    .faq-sidebar-note {
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.55);
+      margin-top: 8px;
+      max-width: 360px;
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .faq-item {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      padding: clamp(28px, 4vh, 40px) 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      transition: background-color 0.25s ease, padding-left 0.25s ease;
+      position: relative;
+    }
+
+    .faq-item:hover {
+      background-color: rgba(255, 255, 255, 0.02);
+      padding-left: 24px;
+    }
+
+    .faq-num {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.35);
+      letter-spacing: 0.05em;
+      padding-top: 4px;
+    }
+
+    .faq-content {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .faq-question {
+      font-family: var(--font-display);
+      font-size: clamp(20px, 2.2vw, 26px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      color: #ffffff;
+    }
+
+    .faq-answer {
+      font-family: var(--font-body);
+      font-size: clamp(15px, 1.25vw, 17px);
+      font-weight: 400;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.65);
+      max-width: 560px;
+    }
+
+    @media (max-width: 900px) {
+      .faq-layout {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .faq-sidebar {
+        position: static;
+      }
+      .faq-item {
+        grid-template-columns: 44px 1fr;
+        padding: 24px 0;
+      }
+      .faq-item:hover {
+        padding-left: 0;
+        background-color: transparent;
+      }
+    }
+
+    /* ========================================================
+       GLOBAL SCROLL REVEAL: EXPANDING & SCALING UP WITH CINEMATIC BLUR DISSOLVE
+       ======================================================== */
+    .scroll-reveal {
+      opacity: 0;
+      filter: blur(6px);
+      transform: translate3d(0, 32px, 0) scale(0.96);
+      transform-origin: center bottom;
+      transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+                  filter 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform, filter;
+    }
+
+    .scroll-reveal.is-revealed {
+      opacity: 1;
+      filter: blur(0px);
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    /* Dramatic expanding scale for hero, large cards, and visual viewports */
+    .scroll-reveal-expand {
+      opacity: 0;
+      filter: blur(8px);
+      transform: translate3d(0, 44px, 0) scale(0.92);
+      transform-origin: center bottom;
+      transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.95s cubic-bezier(0.16, 1, 0.3, 1),
+                  filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform, filter;
+    }
+
+    .scroll-reveal-expand.is-revealed {
+      opacity: 1;
+      filter: blur(0px);
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    /* Staggered Container for Children (e.g. Bento cards, FAQ items) */
+    .scroll-reveal-stagger > * {
+      opacity: 0;
+      filter: blur(5px);
+      transform: translate3d(0, 26px, 0) scale(0.96);
+      transform-origin: center bottom;
+      transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+                  filter 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform, filter;
+    }
+
+    .scroll-reveal-stagger.is-revealed > *:nth-child(1) { transition-delay: 0.04s; }
+    .scroll-reveal-stagger.is-revealed > *:nth-child(2) { transition-delay: 0.12s; }
+    .scroll-reveal-stagger.is-revealed > *:nth-child(3) { transition-delay: 0.20s; }
+    .scroll-reveal-stagger.is-revealed > *:nth-child(4) { transition-delay: 0.28s; }
+    .scroll-reveal-stagger.is-revealed > *:nth-child(5) { transition-delay: 0.36s; }
+    .scroll-reveal-stagger.is-revealed > *:nth-child(6) { transition-delay: 0.44s; }
+
+    .scroll-reveal-stagger.is-revealed > * {
+      opacity: 1;
+      filter: blur(0px);
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-reveal,
+      .scroll-reveal-expand,
+      .scroll-reveal-stagger > * {
+        opacity: 1 !important;
+        filter: none !important;
+        transform: none !important;
+        transition: none !important;
+      }
+    }
+
+    /* Parallax depth container smoothing */
+    .biz-tall-visual-wrap,
+    .biz-card-img-wrap,
+    .biz-chess-img-wrap,
+    .biz-wide-visual {
+      overflow: hidden;
+    }
+
+    .biz-tall-img,
+    .biz-card-img,
+    .biz-chess-img,
+    .biz-wide-img {
+      transform: scale(1.08);
+      transition: transform 0.12s cubic-bezier(0.2, 0.8, 0.2, 1);
+      will-change: transform;
+    }
+
+    /* Smooth page scroll offset padding for pinned navbar */
+    section {
+      scroll-margin-top: 72px;
+    }
+
+    /* ========================================================
+       COMPREHENSIVE MOBILE OPTIMIZATIONS (<= 768px & <= 480px)
+       ======================================================== */
+    @media (max-width: 768px) {
+      section {
+        scroll-margin-top: 60px;
+      }
+
+      /* Pinned Header */
+      .navbar {
+        padding: 0 16px;
+        height: 60px;
+      }
+      .navbar.is-scrolled {
+        height: 54px;
+      }
+      .brand-text {
+        font-size: 21px;
+      }
+      .navbar-logo {
+        height: 23px;
+      }
+      .nav-right-group {
+        gap: 8px;
+      }
+      .nav-action-btn {
+        padding: 5.5px 8px 5.5px 12px;
+        font-size: 12px;
+        gap: 6px;
+      }
+      .nav-btn-arrow {
+        width: 18px;
+        height: 18px;
+      }
+      .nav-hamburger {
+        width: 36px;
+        height: 36px;
+      }
+
+      /* Hero Stage */
+      .hero-body {
+        top: 48%;
+        padding: 0 16px;
+      }
+      .heading-top {
+        font-size: clamp(22px, 6vw, 36px);
+      }
+      .heading-main {
+        font-size: clamp(38px, 10.5vw, 68px);
+        margin-bottom: 14px;
+      }
+      .hero-subtext {
+        font-size: clamp(14px, 3.8vw, 16px);
+        margin-bottom: 24px;
+        line-height: 1.4;
+        max-width: 92vw;
+      }
+      .btn-card {
+        padding: 10px 12px 10px 18px;
+        font-size: 13.5px;
+      }
+      .btn-business {
+        padding: 11px 20px;
+        font-size: 13.5px;
+      }
+      .hero-ticker-bar {
+        height: 44px;
+      }
+      .ticker-label {
+        font-size: 10.5px;
+        letter-spacing: 0.14em;
+      }
+
+      /* Section 1.5 Currency Stream */
+      .currency-track.is-left {
+        right: calc(50% + 5rem);
+        opacity: 0.15;
+      }
+      .currency-track.is-right {
+        left: calc(50% + 5rem);
+        opacity: 0.15;
+      }
+      .currency-headline {
+        font-size: clamp(19px, 5.2vw, 24px);
+        line-height: 1.25;
+        white-space: normal;
+        padding: 0 16px;
+      }
+      .currency-features-list {
+        padding: 0 16px;
+      }
+      .currency-feature-line {
+        font-size: clamp(14.5px, 4vw, 17px);
+        white-space: normal;
+        text-align: center;
+      }
+
+      /* Section 4 The Cards */
+      .cards-ed-header {
+        top: clamp(60px, 8vh, 80px);
+        left: 16px;
+      }
+      .cards-ed-title {
+        font-size: clamp(28px, 7.5vw, 42px);
+      }
+      .cards-ed-subtitle {
+        font-size: 13px;
+      }
+      .cards-ed-info {
+        bottom: clamp(68px, 9.5vh, 88px);
+        left: 16px;
+        right: 16px;
+      }
+      .cards-ed-name {
+        font-size: clamp(20px, 5.5vw, 28px);
+      }
+      .cards-ed-desc {
+        font-size: 13px;
+        line-height: 1.45;
+      }
+      .cards-ed-pills {
+        bottom: 14px;
+        max-width: calc(100vw - 28px);
+        padding: 3px 4px;
+        gap: 3px;
+      }
+      .cards-ed-pill {
+        font-size: 11px;
+        padding: 6px 12px;
+      }
+
+      /* Section 5 For Businesses */
+      .section-business {
+        padding: clamp(60px, 8vh, 90px) 16px;
+      }
+      .biz-header-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      .biz-headline {
+        font-size: clamp(28px, 7.5vw, 40px);
+      }
+      .biz-subhead {
+        font-size: 14px;
+      }
+      .biz-bento-grid {
+        gap: 16px;
+      }
+      .biz-card {
+        padding: 20px;
+        border-radius: 20px;
+      }
+      .biz-tall-visual-wrap {
+        height: 200px;
+      }
+      .biz-wide-visual {
+        height: 180px;
+      }
+      .biz-card-wide-content {
+        padding: 20px;
+      }
+
+      /* Section 6 The Market */
+      .section-market {
+        padding: clamp(60px, 8vh, 90px) 16px;
+      }
+      .market-title {
+        font-size: clamp(28px, 7.5vw, 40px);
+      }
+      .market-lead {
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      .market-status-bar {
+        padding-bottom: 16px;
+        margin-bottom: 24px;
+        gap: 12px;
+      }
+      .market-metrics-strip {
+        gap: 12px 18px;
+      }
+      .market-toolbar {
+        margin-bottom: 12px;
+      }
+      .market-ledger-table th, 
+      .market-ledger-table td {
+        padding: 12px 14px;
+      }
+      .market-biz-avatar {
+        width: 34px;
+        height: 34px;
+        font-size: 11.5px;
+      }
+      .market-biz-name {
+        font-size: 15px;
+      }
+      .cell-price {
+        font-size: 15.5px;
+      }
+      .market-sparkline-svg {
+        width: 64px;
+        height: 20px;
+      }
+
+      /* Section 7 FAQ */
+      .section-faq {
+        padding: clamp(60px, 8vh, 90px) 16px;
+      }
+      .faq-headline {
+        font-size: clamp(26px, 6.5vw, 38px);
+      }
+      .faq-sidebar-note {
+        font-size: 14px;
+      }
+      .faq-item {
+        grid-template-columns: 28px 1fr;
+        gap: 12px;
+        padding: 18px 0;
+      }
+      .faq-num {
+        font-size: 11.5px;
+      }
+      .faq-question {
+        font-size: clamp(16px, 4.2vw, 20px);
+      }
+      .faq-answer {
+        font-size: 13.5px;
+      }
+
+      /* Section 8 Footer */
+      .freedom-footer {
+        padding: 56px 16px 36px;
+      }
+      .footer-top {
+        gap: 36px;
+        margin-bottom: 40px;
+      }
+      .footer-links-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 32px 20px;
+        width: 100%;
+      }
+      .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .brand-text {
+        font-size: 19px;
+      }
+      .navbar-logo {
+        height: 21px;
+      }
+      .nav-action-btn {
+        padding: 5px 8px;
+        font-size: 11px;
+      }
+      .cta-row {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+      }
+      .btn-card, .btn-business {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+      }
+      .cards-ed-pills {
+        max-width: calc(100vw - 20px);
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .footer-links-group {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Global Scroll Reading Progress Bar -->
+  <div class="global-scroll-progress" id="globalScrollProgress" aria-hidden="true"></div>
+
+  <!-- ================= SECTION 1: HERO SECTION ================= -->
+  <div class="hero-stage" id="home">
+    <div class="hero-bg">
+      <video autoplay muted loop playsinline>
+        <source src="./Lady_swiping_card_for_payment_20260929211004.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="hero-overlay"></div>
+
+    <header class="navbar">
+      <a href="#home" class="brand-logo" aria-label="Freedom">
+        <svg class="brand-logo-svg navbar-logo" viewBox="-2 9 89 74" role="img" aria-label="Freedom Bird">
+          <path fill="currentColor" d="M35.3751 40.5314L7.00804 11.9337C6.60458 11.527 5.92129 11.7251 5.84565 12.293C5.06196 18.1764 7.74057 25.6995 9.89408 30.2249C10.2008 30.8695 9.50664 31.5825 8.8647 31.2702C6.89863 30.3138 4.2884 29.0513 2.05901 27.9921C1.53752 27.7443 0.96468 28.1712 1.10398 28.7315C2.10841 32.7714 5.18269 37.3582 7.44167 40.2027C7.86869 40.7405 7.41118 41.5575 6.73343 41.4473C5.07632 41.178 3.04296 40.8431 1.45784 40.5707C0.861348 40.4682 0.412268 41.0871 0.73443 41.5995C3.9151 46.658 9.84962 50.6479 13.9325 52.7981C14.5871 53.1429 14.4271 54.197 13.6945 54.3001C12.1843 54.5127 10.491 54.7553 9.21279 54.9488C8.64465 55.0348 8.41741 55.7008 8.85771 56.07C12.9748 59.5225 21.3768 61.2976 26.4229 61.9209C27.0378 61.9969 27.3108 62.7529 26.8727 63.191L19.6257 70.438C19.3354 70.7284 19.3415 71.2005 19.6508 71.4706C23.259 74.621 28.4889 76.8065 31.0971 77.651C31.3489 77.7326 31.6217 77.6643 31.8118 77.4801L34.1586 75.2066C34.6216 74.7581 35.3962 75.0858 35.3962 75.7304V78.1313C35.3962 78.4319 35.579 78.7038 35.8647 78.7975C39.6788 80.048 45.9134 79.4994 49.1499 78.9758C49.4981 78.9195 49.7493 78.6168 49.7493 78.2641V76.1272C49.7493 75.4616 50.5743 75.1367 51.0389 75.6134C51.7778 76.3715 52.5906 77.1653 53.1258 77.5835C53.2939 77.7149 53.517 77.7415 53.72 77.676C59.6438 75.7622 63.7406 72.9956 65.514 71.4601C65.8187 71.1963 65.8188 70.737 65.5341 70.4516C63.5321 68.4439 60.2045 65.0783 58.2306 62.9903C57.8048 62.54 58.1169 61.8088 58.7355 61.7704C68.222 61.181 73.7742 58.1772 76.1068 56.0898C76.5306 55.7106 76.2739 55.0741 75.7093 55.0065C74.2627 54.8334 72.3424 54.582 70.7175 54.3143C70.0425 54.2031 69.9238 53.3222 70.5252 52.9961C78.9046 48.4516 82.932 43.8991 84.3728 41.3439C84.6496 40.8529 84.2104 40.3421 83.6592 40.4602C82.3228 40.7467 80.4338 41.1487 78.5091 41.5514C77.8129 41.6971 77.3231 40.8423 77.7727 40.2912C81.4261 35.8134 83.2326 31.3025 83.9078 28.6805C84.0493 28.1308 83.5086 27.7025 82.9905 27.9342C81.5745 28.5677 79.2768 29.6435 76.3482 31.125C75.7146 31.4455 75.0146 30.7566 75.3054 30.1088C78.6669 22.6204 79.0828 16.2155 78.7663 12.905C78.7119 12.3354 78.0522 12.1146 77.6426 12.5142C73.9853 16.0816 61.5197 28.3901 32.8283 56.994C32.5175 57.3038 31.994 57.281 31.7453 56.9195C27.17 50.2684 31.7646 44.3282 35.2747 41.6805C35.6433 41.4025 35.7002 40.8592 35.3751 40.5314Z M34.441 46.1547C33.6845 47.144 33.3253 48.3567 33.1761 49.3712C33.0838 49.9987 33.794 50.27 34.2236 49.8035L37.3603 46.3979C36.9143 45.6276 35.7061 44.5004 34.441 46.1547Z"></path>
+        </svg>
+        <span class="brand-text">FREEDOM</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+        <li><a href="#the-cards" class="nav-link">The Cards</a></li>
+        <li><a href="#for-businesses" class="nav-link">For Businesses</a></li>
+        <li><a href="#the-market" class="nav-link">The Market</a></li>
+        <li><a href="#faq" class="nav-link">FAQ</a></li>
+      </ul>
+
+      <div class="nav-right-group">
+        <a href="https://app.freedomnetwork.xyz/sign-in" class="nav-action-btn">
+          <span>Get Your Card</span>
+          <span class="nav-btn-arrow">
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="2" y1="10" x2="10" y2="2"></line>
+              <polyline points="3 2 10 2 10 9"></polyline>
+            </svg>
+          </span>
+        </a>
+
+        <button class="nav-hamburger" id="navHamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobileNavDrawer">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer Overlay -->
+    <div class="mobile-nav-drawer" id="mobileNavDrawer" aria-hidden="true">
+      <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
+      <div class="mobile-nav-panel">
+        <div class="mobile-nav-links">
+          <a href="#how-it-works" class="mobile-nav-link">
+            <span class="mobile-nav-num">01</span>
+            <span class="mobile-nav-title">How It Works</span>
+          </a>
+          <a href="#the-cards" class="mobile-nav-link">
+            <span class="mobile-nav-num">02</span>
+            <span class="mobile-nav-title">The Cards</span>
+          </a>
+          <a href="#for-businesses" class="mobile-nav-link">
+            <span class="mobile-nav-num">03</span>
+            <span class="mobile-nav-title">For Businesses</span>
+          </a>
+          <a href="#the-market" class="mobile-nav-link">
+            <span class="mobile-nav-num">04</span>
+            <span class="mobile-nav-title">The Market</span>
+          </a>
+          <a href="#faq" class="mobile-nav-link">
+            <span class="mobile-nav-num">05</span>
+            <span class="mobile-nav-title">FAQ</span>
+          </a>
+        </div>
+        <div class="mobile-nav-footer">
+          <a href="https://app.freedomnetwork.xyz/sign-in" class="mobile-nav-cta">
+            <span>Get Your Card</span>
+            <span class="nav-btn-arrow">
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="2" y1="10" x2="10" y2="2"></line>
+                <polyline points="3 2 10 2 10 9"></polyline>
+              </svg>
+            </span>
+          </a>
+          <a href="https://exchange.freedomnetwork.xyz" class="mobile-nav-sublink" target="_blank" rel="noopener">
+            <span>Freedom Exchange</span>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="2" y1="10" x2="10" y2="2"></line>
+              <polyline points="3 2 10 2 10 9"></polyline>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- Centered Hero Text & CTAs -->
+    <main class="hero-body">
+      <h2 class="heading-top">A Card That Makes</h2>
+      <h1 class="heading-main">Money For You.</h1>
+
+      <p class="hero-subtext">Tap To Pay At Any Freedom Shop And You Own A Slice Of It. Every Time.</p>
+
+      <div class="cta-row">
+        <a href="https://app.freedomnetwork.xyz/sign-in" class="btn-card">
+          <span>Get Your Card</span>
+          <span class="btn-card-circle">
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="2" y1="10" x2="10" y2="2"></line>
+              <polyline points="3 2 10 2 10 9"></polyline>
+            </svg>
+          </span>
+        </a>
+
+        <a href="https://exchange.freedomnetwork.xyz" class="btn-business">
+          List your bussiness
+        </a>
+      </div>
+    </main>
+
+    <!-- Bottom Ticker -->
+    <footer class="hero-ticker-bar">
+      <div class="ticker-label">
+        <span>THE FREEDOM CARD</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ================= SECTION 1.5: CURRENCY STREAM SCROLL (MOTO-CARD STYLE) ================= -->
+  <section class="section-currency-scroll" id="spend-globally">
+    <div class="currency-sticky-viewport">
+      
+      <!-- Streaming Currency Tracks -->
+      <div class="currency-tracks-container" aria-hidden="true">
+        <!-- Left Track (streams upwards) -->
+        <div class="currency-track is-left">
+          <div class="currency-number-item">¥20,000</div>
+          <div class="currency-number-item">CHF 40.000</div>
+          <div class="currency-number-item">CHF 40.000</div>
+          <div class="currency-number-item">£15.000</div>
+          <div class="currency-number-item">₩22.000</div>
+          <div class="currency-number-item">¥20,000</div>
+          <div class="currency-number-item">€12.500</div>
+          <div class="currency-number-item">₺28.000</div>
+          <div class="currency-number-item">$50,000</div>
+          <div class="currency-number-item">₦350,000</div>
+          <div class="currency-number-item">CHF 40.000</div>
+          <div class="currency-number-item">£15.000</div>
+          <div class="currency-number-item">₩22.000</div>
+          <div class="currency-number-item">¥20,000</div>
+          <div class="currency-number-item">€12.500</div>
+          <div class="currency-number-item">₺28.000</div>
+          <div class="currency-number-item">CA$30.000</div>
+          <div class="currency-number-item">¥20,000</div>
+          <div class="currency-number-item">CHF 40.000</div>
+          <div class="currency-number-item">£15.000</div>
+          <div class="currency-number-item">₩22.000</div>
+          <div class="currency-number-item">€12.500</div>
+          <div class="currency-number-item">₺28.000</div>
+          <div class="currency-number-item">¥20,000</div>
+          <div class="currency-number-item">CHF 40.000</div>
+        </div>
+
+        <!-- Right Track (streams in reverse/opposite direction) -->
+        <div class="currency-track is-right">
+          <div class="currency-number-item">¥20,000</div>
+          <div class="currency-number-item">CHF 40.000</div>
+          <div class="currency-number-item">CHF 40.000</div>
+          <div class="currency-number-item">£15.000</div>
+          <div class="currency-number-item">₩22.000</div>
+          <div class="currency-number-item">¥20,000</div>
+          <div class="currency-number-item">€12.500</div>
+          <div class="currency-number-item">₺28.000</div>
+          <div class="currency-number-item">$50,000</div>
+          <div class="currency-number-item">₦350,000</div>
+          <div class="currency-number-item">CHF 40.000</div>
+          <div class="currency-number-item">£15.000</div>
+          <div class="currency-number-item">₩22.000</div>
+          <div class="currency-number-item">¥20,000</div>
+          <div class="currency-number-item">€12.500</div>
+          <div class="currency-number-item">₺28.000</div>
+          <div class="currency-number-item">CA$30.000</div>
+          <div class="currency-number-item">¥20,000</div>
+          <div class="currency-number-item">CHF 40.000</div>
+          <div class="currency-number-item">£15.000</div>
+          <div class="currency-number-item">₩22.000</div>
+          <div class="currency-number-item">€12.500</div>
+          <div class="currency-number-item">₺28.000</div>
+          <div class="currency-number-item">¥20,000</div>
+          <div class="currency-number-item">CHF 40.000</div>
+        </div>
+      </div>
+
+      <!-- Center Morphing Typography Stage -->
+      <div class="currency-center-stage">
+        <!-- Message Phase 1: SPEND GLOBALLY. OWN WHERE YOU TAP. -->
+        <div class="currency-msg-box msg-phase-1">
+          <h2 class="currency-headline">
+            SPEND GLOBALLY.<br>
+            OWN WHERE YOU TAP.
+          </h2>
+        </div>
+
+        <!-- Message Phase 2: Frictionless tap / Every purchase buys equity -->
+        <div class="currency-msg-box msg-phase-2">
+          <div class="currency-features-list">
+            <div class="currency-feature-line">Frictionless tap</div>
+            <div class="currency-feature-line">Every purchase buys equity</div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= SECTION 2: HOW IT WORKS (PINNED DISSOLVE STAGE) ================= -->
+  <section class="section-how-pinned" id="how-it-works">
+    <div class="how-sticky-viewport">
+
+      <!-- ================= STEP PANE 01: TAP ================= -->
+      <div class="step-pane is-active" data-step="1">
+        <!-- Right Side: Visual Artwork filling the white space -->
+        <div class="step-pane-right-visual">
+          <img class="step-split-img" src="./step1-panel.png" alt="Freedom Card contactless tap payment" />
+        </div>
+
+        <!-- Left Side: Black Background -->
+        <div class="step-pane-left-bg"></div>
+
+        <!-- Stage 1: Pinned Content -->
+        <div class="step-stage-1">
+          <div class="step-stage1-body">
+            <div class="step-stage1-header">
+              <div class="step-premise-block">
+                <h2 class="step-premise">
+                  <span>3 things happen</span>
+                  <span>when you tap.</span>
+                </h2>
+              </div>
+              <div class="step-stage1-action-group">
+                <h3 class="step-stage1-title">
+                  <span class="step-title-action">01 · TAP.</span>
+                  <span class="step-title-sub">Pay like any card.</span>
+                </h3>
+              </div>
+            </div>
+          </div>
+          <div class="step-stage1-bottom">
+            <ul class="step-feature-bullets">
+              <li>Instant Contactless — Pay with card, phone, or watch</li>
+              <li>Zero Foreign Fees — True interbank FX in 150+ countries</li>
+              <li>Global Acceptance — Powered by the worldwide Visa network</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Stage 2: Kinetic Dual-Column Scrub (Text Animation) -->
+        <div class="step-stage-2">
+          <div class="step-medallion-container" aria-hidden="true">
+            <svg class="step-medallion-svg" viewBox="0 0 354 383" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="177" cy="191" r="172" stroke="rgba(255, 255, 255, 0.14)" stroke-width="1.5" stroke-dasharray="4 4" />
+              <circle cx="177" cy="191" r="158" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1" />
+              <path d="M35.3751 40.5314L7.00804 11.9337C6.60458 11.527 5.92129 11.7251 5.84565 12.293C5.06196 18.1764 7.74057 25.6995 9.89408 30.2249C10.2008 30.8695 9.50664 31.5825 8.8647 31.2702C6.89863 30.3138 4.2884 29.0513 2.05901 27.9921C1.53752 27.7443 0.96468 28.1712 1.10398 28.7315C2.10841 32.7714 5.18269 37.3582 7.44167 40.2027C7.86869 40.7405 7.41118 41.5575 6.73343 41.4473C5.07632 41.178 3.04296 40.8431 1.45784 40.5707C0.861348 40.4682 0.412268 41.0871 0.73443 41.5995C3.9151 46.658 9.84962 50.6479 13.9325 52.7981C14.5871 53.1429 14.4271 54.197 13.6945 54.3001C12.1843 54.5127 10.491 54.7553 9.21279 54.9488C8.64465 55.0348 8.41741 55.7008 8.85771 56.07C12.9748 59.5225 21.3768 61.2976 26.4229 61.9209C27.0378 61.9969 27.3108 62.7529 26.8727 63.191L19.6257 70.438C19.3354 70.7284 19.3415 71.2005 19.6508 71.4706C23.259 74.621 28.4889 76.8065 31.0971 77.651C31.3489 77.7326 31.6217 77.6643 31.8118 77.4801L34.1586 75.2066C34.6216 74.7581 35.3962 75.0858 35.3962 75.7304V78.1313C35.3962 78.4319 35.579 78.7038 35.8647 78.7975C39.6788 80.048 45.9134 79.4994 49.1499 78.9758C49.4981 78.9195 49.7493 78.6168 49.7493 78.2641V76.1272C49.7493 75.4616 50.5743 75.1367 51.0389 75.6134C51.7778 76.3715 52.5906 77.1653 53.1258 77.5835C53.2939 77.7149 53.517 77.7415 53.72 77.676C59.6438 75.7622 63.7406 72.9956 65.514 71.4601C65.8187 71.1963 65.8188 70.737 65.5341 70.4516C63.5321 68.4439 60.2045 65.0783 58.2306 62.9903C57.8048 62.54 58.1169 61.8088 58.7355 61.7704C68.222 61.181 73.7742 58.1772 76.1068 56.0898C76.5306 55.7106 76.2739 55.0741 75.7093 55.0065C74.2627 54.8334 72.3424 54.582 70.7175 54.3143C70.0425 54.2031 69.9238 53.3222 70.5252 52.9961C78.9046 48.4516 82.932 43.8991 84.3728 41.3439C84.6496 40.8529 84.2104 40.3421 83.6592 40.4602C82.3228 40.7467 80.4338 41.1487 78.5091 41.5514C77.8129 41.6971 77.3231 40.8423 77.7727 40.2912C81.4261 35.8134 83.2326 31.3025 83.9078 28.6805C84.0493 28.1308 83.5086 27.7025 82.9905 27.9342C81.5745 28.5677 79.2768 29.6435 76.3482 31.125C75.7146 31.4455 75.0146 30.7566 75.3054 30.1088C78.6669 22.6204 79.0828 16.2155 78.7663 12.905C78.7119 12.3354 78.0522 12.1146 77.6426 12.5142C73.9853 16.0816 61.5197 28.3901 32.8283 56.994C32.5175 57.3038 31.994 57.281 31.7453 56.9195C27.17 50.2684 31.7646 44.3282 35.2747 41.6805C35.6433 41.4025 35.7002 40.8592 35.3751 40.5314Z M34.441 46.1547C33.6845 47.144 33.3253 48.3567 33.1761 49.3712C33.0838 49.9987 33.794 50.27 34.2236 49.8035L37.3603 46.3979C36.9143 45.6276 35.7061 44.5004 34.441 46.1547Z" fill="white" fill-opacity="0.14" transform="translate(135, 140) scale(1.1)"/>
+            </svg>
+          </div>
+          <div class="step-kinetic-columns">
+            <div class="step-column is-left">
+              <div class="step-item-wrap is-left"><p class="step-line is-left">01 · Tap</p></div>
+              <div class="step-item-wrap is-left"><p class="step-line is-left">Frictionless checkout</p></div>
+              <div class="step-item-wrap is-left"><p class="step-line is-left">Zero FX fees</p></div>
+              <div class="step-item-wrap is-left"><p class="step-line is-left">Global Visa network</p></div>
+            </div>
+            <div class="step-column is-right">
+              <div class="step-item-wrap is-right"><p class="step-line is-right">01 · PAY LIKE ANY CARD</p></div>
+              <div class="step-item-wrap is-right"><p class="step-line is-right">ONE CARD EVERYWHERE</p></div>
+              <div class="step-item-wrap is-right"><p class="step-line is-right">FRICTIONLESS CONTACTLESS</p></div>
+              <div class="step-item-wrap is-right"><p class="step-line is-right">0% FX GLOBALLY</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= STEP PANE 02: OWN ================= -->
+      <div class="step-pane" data-step="2">
+        <!-- Right Side: Visual Artwork filling the white space -->
+        <div class="step-pane-right-visual">
+          <img class="step-split-img" src="./step2-panel.png" alt="Freedom App Merchant Equity Shares" />
+        </div>
+
+        <!-- Left Side: Black Background -->
+        <div class="step-pane-left-bg"></div>
+
+        <!-- Stage 1: Pinned Content -->
+        <div class="step-stage-1">
+          <div class="step-stage1-body">
+            <div class="step-stage1-header">
+              <div class="step-stage1-action-group">
+                <h2 class="step-stage1-title">
+                  <span class="step-title-action">02 · OWN.</span>
+                  <span class="step-title-sub">Part of the fee buys you shares in that shop.</span>
+                </h2>
+              </div>
+            </div>
+          </div>
+          <div class="step-stage1-bottom">
+            <ul class="step-feature-bullets">
+              <li>Shop Equity — A slice of every merchant swipe fee is yours</li>
+              <li>Frictionless Ownership — No paperwork, no broker approvals</li>
+              <li>Automatic Accumulation — Build a real merchant portfolio daily</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Stage 2: Kinetic Dual-Column Scrub (Text Animation) -->
+        <div class="step-stage-2">
+          <div class="step-medallion-container" aria-hidden="true">
+            <svg class="step-medallion-svg" viewBox="0 0 354 383" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="177" cy="191" r="172" stroke="rgba(255, 255, 255, 0.14)" stroke-width="1.5" stroke-dasharray="4 4" />
+              <circle cx="177" cy="191" r="158" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1" />
+              <path d="M35.3751 40.5314L7.00804 11.9337C6.60458 11.527 5.92129 11.7251 5.84565 12.293C5.06196 18.1764 7.74057 25.6995 9.89408 30.2249C10.2008 30.8695 9.50664 31.5825 8.8647 31.2702C6.89863 30.3138 4.2884 29.0513 2.05901 27.9921C1.53752 27.7443 0.96468 28.1712 1.10398 28.7315C2.10841 32.7714 5.18269 37.3582 7.44167 40.2027C7.86869 40.7405 7.41118 41.5575 6.73343 41.4473C5.07632 41.178 3.04296 40.8431 1.45784 40.5707C0.861348 40.4682 0.412268 41.0871 0.73443 41.5995C3.9151 46.658 9.84962 50.6479 13.9325 52.7981C14.5871 53.1429 14.4271 54.197 13.6945 54.3001C12.1843 54.5127 10.491 54.7553 9.21279 54.9488C8.64465 55.0348 8.41741 55.7008 8.85771 56.07C12.9748 59.5225 21.3768 61.2976 26.4229 61.9209C27.0378 61.9969 27.3108 62.7529 26.8727 63.191L19.6257 70.438C19.3354 70.7284 19.3415 71.2005 19.6508 71.4706C23.259 74.621 28.4889 76.8065 31.0971 77.651C31.3489 77.7326 31.6217 77.6643 31.8118 77.4801L34.1586 75.2066C34.6216 74.7581 35.3962 75.0858 35.3962 75.7304V78.1313C35.3962 78.4319 35.579 78.7038 35.8647 78.7975C39.6788 80.048 45.9134 79.4994 49.1499 78.9758C49.4981 78.9195 49.7493 78.6168 49.7493 78.2641V76.1272C49.7493 75.4616 50.5743 75.1367 51.0389 75.6134C51.7778 76.3715 52.5906 77.1653 53.1258 77.5835C53.2939 77.7149 53.517 77.7415 53.72 77.676C59.6438 75.7622 63.7406 72.9956 65.514 71.4601C65.8187 71.1963 65.8188 70.737 65.5341 70.4516C63.5321 68.4439 60.2045 65.0783 58.2306 62.9903C57.8048 62.54 58.1169 61.8088 58.7355 61.7704C68.222 61.181 73.7742 58.1772 76.1068 56.0898C76.5306 55.7106 76.2739 55.0741 75.7093 55.0065C74.2627 54.8334 72.3424 54.582 70.7175 54.3143C70.0425 54.2031 69.9238 53.3222 70.5252 52.9961C78.9046 48.4516 82.932 43.8991 84.3728 41.3439C84.6496 40.8529 84.2104 40.3421 83.6592 40.4602C82.3228 40.7467 80.4338 41.1487 78.5091 41.5514C77.8129 41.6971 77.3231 40.8423 77.7727 40.2912C81.4261 35.8134 83.2326 31.3025 83.9078 28.6805C84.0493 28.1308 83.5086 27.7025 82.9905 27.9342C81.5745 28.5677 79.2768 29.6435 76.3482 31.125C75.7146 31.4455 75.0146 30.7566 75.3054 30.1088C78.6669 22.6204 79.0828 16.2155 78.7663 12.905C78.7119 12.3354 78.0522 12.1146 77.6426 12.5142C73.9853 16.0816 61.5197 28.3901 32.8283 56.994C32.5175 57.3038 31.994 57.281 31.7453 56.9195C27.17 50.2684 31.7646 44.3282 35.2747 41.6805C35.6433 41.4025 35.7002 40.8592 35.3751 40.5314Z M34.441 46.1547C33.6845 47.144 33.3253 48.3567 33.1761 49.3712C33.0838 49.9987 33.794 50.27 34.2236 49.8035L37.3603 46.3979C36.9143 45.6276 35.7061 44.5004 34.441 46.1547Z" fill="white" fill-opacity="0.14" transform="translate(135, 140) scale(1.1)"/>
+            </svg>
+          </div>
+          <div class="step-kinetic-columns">
+            <div class="step-column is-left">
+              <div class="step-item-wrap is-left"><p class="step-line is-left">02 · Own</p></div>
+              <div class="step-item-wrap is-left"><p class="step-line is-left">Every purchase counts</p></div>
+              <div class="step-item-wrap is-left"><p class="step-line is-left">Direct merchant equity</p></div>
+              <div class="step-item-wrap is-left"><p class="step-line is-left">Portfolio in your pocket</p></div>
+            </div>
+            <div class="step-column is-right">
+              <div class="step-item-wrap is-right"><p class="step-line is-right">02 · PART OF FEE BUYS SHARES</p></div>
+              <div class="step-item-wrap is-right"><p class="step-line is-right">EVERY PURCHASE BUYS EQUITY</p></div>
+              <div class="step-item-wrap is-right"><p class="step-line is-right">OWN WHERE YOU TAP</p></div>
+              <div class="step-item-wrap is-right"><p class="step-line is-right">PORTFOLIO ACCUMULATION</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= STEP PANE 03: GROW ================= -->
+      <div class="step-pane" data-step="3">
+        <!-- Right Side: Visual Artwork filling the white space -->
+        <div class="step-pane-right-visual">
+          <img class="step-split-img" src="./step3-panel.png" alt="Freedom Exchange Trading & Growth" />
+        </div>
+
+        <!-- Left Side: Black Background -->
+        <div class="step-pane-left-bg"></div>
+
+        <!-- Stage 1: Pinned Content -->
+        <div class="step-stage-1">
+          <div class="step-stage1-body">
+            <div class="step-stage1-header">
+              <div class="step-stage1-action-group">
+                <h2 class="step-stage1-title">
+                  <span class="step-title-action">03 · GROW.</span>
+                  <span class="step-title-sub">Your shares trade on Freedom Exchange.</span>
+                </h2>
+              </div>
+            </div>
+          </div>
+          <div class="step-stage1-bottom">
+            <ul class="step-feature-bullets">
+              <li>Instant Liquidity — Trade shop shares anytime on Freedom Exchange</li>
+              <li>Compound Capital — Real-time price discovery & dividends</li>
+              <li>Modern Wealth — Spending that pays you back for life</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Stage 2: Kinetic Dual-Column Scrub (Text Animation) -->
+        <div class="step-stage-2">
+          <div class="step-medallion-container" aria-hidden="true">
+            <svg class="step-medallion-svg" viewBox="0 0 354 383" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="177" cy="191" r="172" stroke="rgba(255, 255, 255, 0.14)" stroke-width="1.5" stroke-dasharray="4 4" />
+              <circle cx="177" cy="191" r="158" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1" />
+              <path d="M35.3751 40.5314L7.00804 11.9337C6.60458 11.527 5.92129 11.7251 5.84565 12.293C5.06196 18.1764 7.74057 25.6995 9.89408 30.2249C10.2008 30.8695 9.50664 31.5825 8.8647 31.2702C6.89863 30.3138 4.2884 29.0513 2.05901 27.9921C1.53752 27.7443 0.96468 28.1712 1.10398 28.7315C2.10841 32.7714 5.18269 37.3582 7.44167 40.2027C7.86869 40.7405 7.41118 41.5575 6.73343 41.4473C5.07632 41.178 3.04296 40.8431 1.45784 40.5707C0.861348 40.4682 0.412268 41.0871 0.73443 41.5995C3.9151 46.658 9.84962 50.6479 13.9325 52.7981C14.5871 53.1429 14.4271 54.197 13.6945 54.3001C12.1843 54.5127 10.491 54.7553 9.21279 54.9488C8.64465 55.0348 8.41741 55.7008 8.85771 56.07C12.9748 59.5225 21.3768 61.2976 26.4229 61.9209C27.0378 61.9969 27.3108 62.7529 26.8727 63.191L19.6257 70.438C19.3354 70.7284 19.3415 71.2005 19.6508 71.4706C23.259 74.621 28.4889 76.8065 31.0971 77.651C31.3489 77.7326 31.6217 77.6643 31.8118 77.4801L34.1586 75.2066C34.6216 74.7581 35.3962 75.0858 35.3962 75.7304V78.1313C35.3962 78.4319 35.579 78.7038 35.8647 78.7975C39.6788 80.048 45.9134 79.4994 49.1499 78.9758C49.4981 78.9195 49.7493 78.6168 49.7493 78.2641V76.1272C49.7493 75.4616 50.5743 75.1367 51.0389 75.6134C51.7778 76.3715 52.5906 77.1653 53.1258 77.5835C53.2939 77.7149 53.517 77.7415 53.72 77.676C59.6438 75.7622 63.7406 72.9956 65.514 71.4601C65.8187 71.1963 65.8188 70.737 65.5341 70.4516C63.5321 68.4439 60.2045 65.0783 58.2306 62.9903C57.8048 62.54 58.1169 61.8088 58.7355 61.7704C68.222 61.181 73.7742 58.1772 76.1068 56.0898C76.5306 55.7106 76.2739 55.0741 75.7093 55.0065C74.2627 54.8334 72.3424 54.582 70.7175 54.3143C70.0425 54.2031 69.9238 53.3222 70.5252 52.9961C78.9046 48.4516 82.932 43.8991 84.3728 41.3439C84.6496 40.8529 84.2104 40.3421 83.6592 40.4602C82.3228 40.7467 80.4338 41.1487 78.5091 41.5514C77.8129 41.6971 77.3231 40.8423 77.7727 40.2912C81.4261 35.8134 83.2326 31.3025 83.9078 28.6805C84.0493 28.1308 83.5086 27.7025 82.9905 27.9342C81.5745 28.5677 79.2768 29.6435 76.3482 31.125C75.7146 31.4455 75.0146 30.7566 75.3054 30.1088C78.6669 22.6204 79.0828 16.2155 78.7663 12.905C78.7119 12.3354 78.0522 12.1146 77.6426 12.5142C73.9853 16.0816 61.5197 28.3901 32.8283 56.994C32.5175 57.3038 31.994 57.281 31.7453 56.9195C27.17 50.2684 31.7646 44.3282 35.2747 41.6805C35.6433 41.4025 35.7002 40.8592 35.3751 40.5314Z M34.441 46.1547C33.6845 47.144 33.3253 48.3567 33.1761 49.3712C33.0838 49.9987 33.794 50.27 34.2236 49.8035L37.3603 46.3979C36.9143 45.6276 35.7061 44.5004 34.441 46.1547Z" fill="white" fill-opacity="0.14" transform="translate(135, 140) scale(1.1)"/>
+            </svg>
+          </div>
+          <div class="step-kinetic-columns">
+            <div class="step-column is-left">
+              <div class="step-item-wrap is-left"><p class="step-line is-left">03 · Grow</p></div>
+              <div class="step-item-wrap is-left"><p class="step-line is-left">Live market trading</p></div>
+              <div class="step-item-wrap is-left"><p class="step-line is-left">Continuous liquidity</p></div>
+              <div class="step-item-wrap is-left"><p class="step-line is-left">A card that makes money</p></div>
+            </div>
+            <div class="step-column is-right">
+              <div class="step-item-wrap is-right"><p class="step-line is-right">03 · YOUR SHARES TRADE LIVE</p></div>
+              <div class="step-item-wrap is-right"><p class="step-line is-right">FREEDOM EXCHANGE LIQUIDITY</p></div>
+              <div class="step-item-wrap is-right"><p class="step-line is-right">24/7 GLOBAL MARKETS</p></div>
+              <div class="step-item-wrap is-right"><p class="step-line is-right">BUILT FOR MODERN WEALTH</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= SECTION 4: THE CARDS — CINEMATIC PAN SWIPE ================= -->
+  <section class="section-cards-editorial" id="the-cards" aria-label="Freedom Card Editions">
+    <!-- Panoramic Camera Viewport -->
+    <div class="cards-pan-viewport scroll-reveal-expand" id="cardsViewport">
+      <!-- Panoramic Multi-Edition Filmstrip Track (300vw width, translates horizontally) -->
+      <div class="cards-pan-track" id="cardsPanTrack">
+
+        <!-- Frame 01: Checker Edition -->
+        <div class="cards-pan-frame is-active" data-index="0" data-edition="checker">
+          <div class="cards-frame-inner">
+            <div class="cards-frame-visual">
+              <img src="./card-checker.jpg" alt="Freedom Checker Edition" class="cards-pan-img" draggable="false" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Frame 02: Classic Edition -->
+        <div class="cards-pan-frame" data-index="1" data-edition="classic">
+          <div class="cards-frame-inner">
+            <div class="cards-frame-visual">
+              <img src="./card-classic.png" alt="Freedom Classic Edition" class="cards-pan-img" draggable="false" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Frame 03: Premium Edition -->
+        <div class="cards-pan-frame" data-index="2" data-edition="premium">
+          <div class="cards-frame-inner">
+            <div class="cards-frame-visual">
+              <img src="./card-premium.jpg" alt="Freedom Premium Edition" class="cards-pan-img" draggable="false" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Frame 04: Checker Edition (Seamless Infinite Loop Clone) -->
+        <div class="cards-pan-frame" data-index="3" data-edition="checker">
+          <div class="cards-frame-inner">
+            <div class="cards-frame-visual">
+              <img src="./card-checker.jpg" alt="Freedom Checker Edition" class="cards-pan-img" draggable="false" />
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Cinematic Vignette Scrim (Soft edge framing for contrast) -->
+    <div class="cards-cinematic-vignette" aria-hidden="true"></div>
+
+    <!-- Pinned Editorial Header (Top Left) -->
+    <div class="cards-ed-header scroll-reveal">
+      <h2 class="cards-ed-title">Three editions.<br>One idea.</h2>
+    </div>
+
+    <!-- Edition Meta Information (Bottom Left, Staggered Reveal) -->
+    <div class="cards-ed-info scroll-reveal">
+      <div class="cards-ed-name-clip is-visible" id="edNameWrap">
+        <span class="cards-ed-name-text" id="edName">Checker Edition</span>
+      </div>
+      <p class="cards-ed-desc is-visible" id="edDesc">Black, white, and one red square. The one people ask about.</p>
+    </div>
+
+    <!-- Edition Counter (Bottom Right) -->
+    <div class="cards-ed-counter scroll-reveal">
+      <div class="cards-counter-wrap">
+        <span class="cards-ed-counter-current" id="edCount">01</span>
+        <span class="cards-counter-divider">/</span>
+        <span class="cards-counter-total">03</span>
+      </div>
+    </div>
+
+    <!-- Edition Pill Tabs with Live Animated Progress (Bottom Center) -->
+    <div class="cards-ed-pills scroll-reveal" role="tablist" aria-label="Select card edition">
+      <button class="cards-ed-pill is-active" data-index="0" role="tab" aria-selected="true">
+        <span class="cards-pill-text">Checker</span>
+        <span class="cards-ed-pill-progress"></span>
+      </button>
+      <button class="cards-ed-pill" data-index="1" role="tab" aria-selected="false">
+        <span class="cards-pill-text">Classic</span>
+        <span class="cards-ed-pill-progress"></span>
+      </button>
+      <button class="cards-ed-pill" data-index="2" role="tab" aria-selected="false">
+        <span class="cards-pill-text">Premium</span>
+        <span class="cards-ed-pill-progress"></span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ================= SECTION 5: FOR BUSINESSES (LUXURY BENTO) ================= -->
+  <section class="section-business" id="for-businesses">
+    <div class="biz-container">
+
+      <!-- Section Header (Centered Luxury Style matching reference) -->
+      <div class="biz-header-centered scroll-reveal">
+        <div class="biz-pill-badge">For Businesses</div>
+        <h2 class="biz-main-title">Turn customers into owners.</h2>
+        <p class="biz-main-subtitle">
+          List your shop on Freedom and every tap at your counter hands the customer a small piece of it. They come back, because now it is theirs too.
+        </p>
+      </div>
+
+      <!-- Bento Grid (3 Columns, 2 Rows matching reference) -->
+      <div class="biz-bento-grid scroll-reveal-stagger">
+
+        <!-- Card 1: Tall Left Card (spans 2 rows) -->
+        <div class="biz-bento-card biz-card-tall">
+          <div class="biz-tall-visual-wrap">
+            <img src="./artisan-hand.jpg" alt="Artisan Loyalty" class="biz-tall-img">
+          </div>
+          <div class="biz-tall-content">
+            <div class="biz-tall-text-wrap">
+              <h3 class="biz-tall-title">
+                <strong>They come back.</strong>
+              </h3>
+              <p class="biz-tall-desc">A customer who owns a slice of your shop chooses it over the one next door.</p>
+            </div>
+            <a href="https://app.freedomnetwork.xyz/business" class="biz-pill-btn" target="_blank" rel="noopener">
+              <span>List your shop</span>
+              <span class="biz-pill-arrow-circle" aria-hidden="true">
+                <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="3" y1="11" x2="11" y2="3"></line>
+                  <polyline points="4 3 11 3 11 10"></polyline>
+                </svg>
+              </span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 2: Top Middle Card -->
+        <div class="biz-bento-card biz-card-handshake">
+          <div class="biz-card-img-wrap">
+            <img src="./partner-handshake.jpg" alt="Listing takes an afternoon" class="biz-card-img">
+          </div>
+          <div class="biz-card-text">
+            <p class="biz-duo-text">
+              <strong>Listing takes an afternoon.</strong>
+              <span class="biz-muted-text">Register, tell us about the business, set your terms. That is the whole of it.</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 3: Top Right Card (Stat + Crown Chess King) -->
+        <div class="biz-bento-card biz-card-stat">
+          <div class="biz-stat-split">
+            <div class="biz-stat-left">
+              <span class="biz-stat-number">100%</span>
+              <span class="biz-stat-sublabel">Self-serve terms</span>
+            </div>
+            <div class="biz-chess-img-wrap">
+              <img src="./crown-chess.jpg" alt="You set the share" class="biz-chess-img">
+            </div>
+          </div>
+          <div class="biz-card-text">
+            <p class="biz-duo-text">
+              <strong>You set the share.</strong>
+              <span class="biz-muted-text">You choose how much of each tap becomes shares. Not us.</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 4: Bottom Wide Card (Spans 2 Columns) -->
+        <div class="biz-bento-card biz-card-wide">
+          <div class="biz-wide-content">
+            <p class="biz-wide-text">
+              <strong>Turn customers into owners</strong>
+              <span class="biz-muted-text">and give every tap at your counter lasting equity. Built for modern merchants who value customer loyalty over ad spend.</span>
+            </p>
+          </div>
+          <div class="biz-wide-visual">
+            <img src="./chic-portrait.jpg" alt="Modern business co-ownership" class="biz-wide-img">
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= SECTION 6: THE MARKET (EDITORIAL BROADSHEET) ================= -->
+  <section class="section-market" id="the-market">
+    <div class="market-container">
+
+      <!-- Editorial Header Spread: Asymmetrical 2-Column Magazine Layout -->
+      <div class="market-editorial-header scroll-reveal">
+        <div class="market-editorial-col-left">
+          <h2 class="market-title">A real market behind every card.</h2>
+        </div>
+
+        <div class="market-editorial-col-right">
+          <p class="market-lead">
+            Every shop on Freedom has a price, and it moves with what people are willing to pay. Your shares are worth what the market says they are worth, not what we say.
+          </p>
+          <a href="https://market.freedomnetwork.xyz/" class="market-editorial-cta" target="_blank" rel="noopener">
+            <span>See the market</span>
+            <svg class="market-cta-arrow" width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="11" x2="11" y2="3"></line>
+              <polyline points="4 3 11 3 11 10"></polyline>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Coinbase-Style Market Hub -->
+      <div class="cb-market-hub scroll-reveal-expand">
+
+        <!-- 1. Market Update Block (Matches Screenshot) -->
+        <div class="cb-market-update-block">
+          <div class="cb-section-header-row">
+            <h3 class="cb-section-title">Market update</h3>
+          </div>
+
+          <div class="cb-market-update-grid">
+            <!-- Left Card: Market cap + Green Sparkline with Dotted Fill -->
+            <div class="cb-card cb-card-hero" id="cb-hero-card" title="Click to view total network aggregate">
+              <div>
+                <div class="cb-card-top">
+                  <span class="cb-card-label" id="cb-hero-label">Market cap</span>
+                  <svg class="cb-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+                <div class="cb-card-metric">
+                  <span class="cb-metric-val" id="cb-hero-val">₦1.12B</span>
+                  <span class="cb-metric-change up" id="cb-hero-change">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg>
+                    <span id="cb-hero-pct">14.8%</span>
+                  </span>
+                </div>
+              </div>
+
+              <!-- Coinbase Dotted Fill Sparkline -->
+              <div class="cb-sparkline-wrap">
+                <svg class="cb-sparkline-svg" viewBox="0 0 320 120" preserveAspectRatio="none">
+                  <defs>
+                    <pattern id="cb-spark-dots" width="8" height="8" patternUnits="userSpaceOnUse">
+                      <circle id="cb-dot-circle" cx="4" cy="4" r="1.15" fill="#098551" opacity="0.35"/>
+                    </pattern>
+                    <mask id="cb-spark-mask">
+                      <path id="cb-mask-path" d="M 0,80 Q 25,95 50,75 T 100,55 T 150,70 T 200,45 T 250,55 T 290,25 T 320,15 L 320,120 L 0,120 Z" fill="#ffffff" />
+                    </mask>
+                  </defs>
+                  <rect x="0" y="0" width="320" height="120" fill="url(#cb-spark-dots)" mask="url(#cb-spark-mask)" />
+                  <path id="cb-line-path" d="M 0,80 Q 25,95 50,75 T 100,55 T 150,70 T 200,45 T 250,55 T 290,25 T 320,15" fill="none" stroke="#098551" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Right Column: Trade volume & Buy ratio -->
+            <div class="cb-side-stack">
+              <!-- Top Card: Trade volume -->
+              <div class="cb-card cb-card-mini">
+                <div class="cb-card-top">
+                  <span class="cb-card-label">Trade volume</span>
+                  <svg class="cb-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+                <div class="cb-card-metric">
+                  <span class="cb-metric-val" id="cb-vol-val">₦84.6M</span>
+                  <span class="cb-metric-change down" id="cb-vol-change">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 2.5L9.5 9.5M9.5 9.5H4.5M9.5 9.5V4.5"/></svg>
+                    <span id="cb-vol-pct">4.2%</span>
+                  </span>
+                </div>
+              </div>
+
+              <!-- Bottom Card: Buy ratio -->
+              <div class="cb-card cb-card-mini">
+                <div class="cb-card-top">
+                  <span class="cb-card-label">Buy ratio</span>
+                  <svg class="cb-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+                <div class="cb-card-metric">
+                  <span class="cb-metric-val" id="cb-buy-val">82% buy</span>
+                  <span class="cb-metric-change up" id="cb-buy-change">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg>
+                    <span id="cb-buy-pct">1.15%</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Shops on Freedom (Matches "New on Coinbase" row) -->
+        <div class="cb-shops-section">
+          <div class="cb-section-header-row">
+            <h3 class="cb-section-title">Shops on Freedom</h3>
+            <a href="https://market.freedomnetwork.xyz/" class="cb-circle-arrow-btn" target="_blank" rel="noopener" aria-label="Explore all shops on Freedom">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </div>
+
+          <div class="cb-shops-carousel" id="cb-shops-carousel">
+            <!-- Card 1: Probe Kitchens -->
+            <div class="cb-shop-card" data-key="probekit" role="button" tabindex="0" title="Click to view Probe Kitchens data">
+              <div class="cb-shop-icon" style="background: #0f172a; color: #ffffff;">PK</div>
+              <div class="cb-shop-ticker">PROBEKIT</div>
+              <div class="cb-shop-price">₦40.00</div>
+              <div class="cb-shop-change up">
+                <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg>
+                <span>14.80%</span>
+              </div>
+              <div class="cb-shop-cap">₦320m cap</div>
+            </div>
+
+            <!-- Card 2: BLAZE -->
+            <div class="cb-shop-card" data-key="blaze" role="button" tabindex="0" title="Click to view BLAZE data">
+              <div class="cb-shop-icon" style="background: #ea580c; color: #ffffff;">BZ</div>
+              <div class="cb-shop-ticker">BLAZE</div>
+              <div class="cb-shop-price">₦22.49</div>
+              <div class="cb-shop-change up">
+                <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg>
+                <span>8.20%</span>
+              </div>
+              <div class="cb-shop-cap">₦225m cap</div>
+            </div>
+
+            <!-- Card 3: TSION ARK LIMITED -->
+            <div class="cb-shop-card" data-key="tsionark" role="button" tabindex="0" title="Click to view TSION ARK data">
+              <div class="cb-shop-icon" style="background: #1e1b4b; color: #ffffff;">TA</div>
+              <div class="cb-shop-ticker">TSIONARK</div>
+              <div class="cb-shop-price">₦2.20</div>
+              <div class="cb-shop-change up">
+                <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg>
+                <span>21.50%</span>
+              </div>
+              <div class="cb-shop-cap">₦22m cap</div>
+            </div>
+
+            <!-- Card 4: Maison Élite -->
+            <div class="cb-shop-card" data-key="melite" role="button" tabindex="0" title="Click to view Maison Élite data">
+              <div class="cb-shop-icon" style="background: #3f3f46; color: #ffffff;">ME</div>
+              <div class="cb-shop-ticker">MELITE</div>
+              <div class="cb-shop-price">₦18.75</div>
+              <div class="cb-shop-change down">
+                <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 2.5L9.5 9.5M9.5 9.5H4.5M9.5 9.5V4.5"/></svg>
+                <span>3.40%</span>
+              </div>
+              <div class="cb-shop-cap">₦150m cap</div>
+            </div>
+
+            <!-- Card 5: Kover Studio -->
+            <div class="cb-shop-card" data-key="kover" role="button" tabindex="0" title="Click to view Kover Studio data">
+              <div class="cb-shop-icon" style="background: #042f2e; color: #ffffff;">KS</div>
+              <div class="cb-shop-ticker">KOVER</div>
+              <div class="cb-shop-price">₦64.00</div>
+              <div class="cb-shop-change up">
+                <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg>
+                <span>12.10%</span>
+              </div>
+              <div class="cb-shop-cap">₦410m cap</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Colophon / Hub Footer -->
+        <div class="cb-market-footer scroll-reveal">
+          <div class="cb-footer-left">
+            <span class="cb-timestamp">As of 30 Sept 2026, 11:21</span>
+            <span class="cb-footer-sep">/</span>
+            <span class="cb-footer-note">Prices determined by open market order book.</span>
+          </div>
+          <div class="cb-footer-right">
+            <a href="https://market.freedomnetwork.xyz/" class="cb-footer-link" target="_blank" rel="noopener">
+              <span>Explore all shops on Freedom</span>
+              <span class="cb-footer-arrow">↗</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= SECTION 7: FAQ ================= -->
+  <section class="section-faq" id="faq">
+    <div class="faq-container">
+      <div class="faq-layout">
+        <aside class="faq-sidebar scroll-reveal">
+          <h2 class="faq-headline">What you should know before you tap.</h2>
+          <p class="faq-sidebar-note">Full clarity on your funds, your equity, and how Freedom protects every transaction.</p>
+        </aside>
+
+        <div class="faq-list scroll-reveal-stagger" role="region" aria-label="Frequently Asked Questions">
+          <!-- Item 01 -->
+          <article class="faq-item">
+            <span class="faq-num" aria-hidden="true">01</span>
+            <div class="faq-content">
+              <h3 class="faq-question">Your money stays yours.</h3>
+              <p class="faq-answer">The card is prepaid. You top up what you spend, and nothing more.</p>
+            </div>
+          </article>
+
+          <!-- Item 02 -->
+          <article class="faq-item">
+            <span class="faq-num" aria-hidden="true">02</span>
+            <div class="faq-content">
+              <h3 class="faq-question">Your shares are real.</h3>
+              <p class="faq-answer">Listed on Freedom Exchange and priced every trading day.</p>
+            </div>
+          </article>
+
+          <!-- Item 03 -->
+          <article class="faq-item">
+            <span class="faq-num" aria-hidden="true">03</span>
+            <div class="faq-content">
+              <h3 class="faq-question">Shares from taps unlock after 120 days.</h3>
+              <p class="faq-answer">So a refund can always be honoured.</p>
+            </div>
+          </article>
+
+          <!-- Item 04 -->
+          <article class="faq-item">
+            <span class="faq-num" aria-hidden="true">04</span>
+            <div class="faq-content">
+              <h3 class="faq-question">Every tap is on the record.</h3>
+              <p class="faq-answer">What you paid, what you own, and when. In the app, always.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SECTION 8: FOOTER ================= -->
+  <footer class="freedom-footer">
+    <div class="footer-container">
+      <div class="footer-top scroll-reveal">
+        <div class="footer-brand">
+          <a href="#home" class="footer-logo-link" aria-label="Freedom">
+            <svg class="brand-logo-svg footer-logo" viewBox="-2 9 89 74" role="img" aria-label="Freedom Bird">
+              <path fill="currentColor" d="M35.3751 40.5314L7.00804 11.9337C6.60458 11.527 5.92129 11.7251 5.84565 12.293C5.06196 18.1764 7.74057 25.6995 9.89408 30.2249C10.2008 30.8695 9.50664 31.5825 8.8647 31.2702C6.89863 30.3138 4.2884 29.0513 2.05901 27.9921C1.53752 27.7443 0.96468 28.1712 1.10398 28.7315C2.10841 32.7714 5.18269 37.3582 7.44167 40.2027C7.86869 40.7405 7.41118 41.5575 6.73343 41.4473C5.07632 41.178 3.04296 40.8431 1.45784 40.5707C0.861348 40.4682 0.412268 41.0871 0.73443 41.5995C3.9151 46.658 9.84962 50.6479 13.9325 52.7981C14.5871 53.1429 14.4271 54.197 13.6945 54.3001C12.1843 54.5127 10.491 54.7553 9.21279 54.9488C8.64465 55.0348 8.41741 55.7008 8.85771 56.07C12.9748 59.5225 21.3768 61.2976 26.4229 61.9209C27.0378 61.9969 27.3108 62.7529 26.8727 63.191L19.6257 70.438C19.3354 70.7284 19.3415 71.2005 19.6508 71.4706C23.259 74.621 28.4889 76.8065 31.0971 77.651C31.3489 77.7326 31.6217 77.6643 31.8118 77.4801L34.1586 75.2066C34.6216 74.7581 35.3962 75.0858 35.3962 75.7304V78.1313C35.3962 78.4319 35.579 78.7038 35.8647 78.7975C39.6788 80.048 45.9134 79.4994 49.1499 78.9758C49.4981 78.9195 49.7493 78.6168 49.7493 78.2641V76.1272C49.7493 75.4616 50.5743 75.1367 51.0389 75.6134C51.7778 76.3715 52.5906 77.1653 53.1258 77.5835C53.2939 77.7149 53.517 77.7415 53.72 77.676C59.6438 75.7622 63.7406 72.9956 65.514 71.4601C65.8187 71.1963 65.8188 70.737 65.5341 70.4516C63.5321 68.4439 60.2045 65.0783 58.2306 62.9903C57.8048 62.54 58.1169 61.8088 58.7355 61.7704C68.222 61.181 73.7742 58.1772 76.1068 56.0898C76.5306 55.7106 76.2739 55.0741 75.7093 55.0065C74.2627 54.8334 72.3424 54.582 70.7175 54.3143C70.0425 54.2031 69.9238 53.3222 70.5252 52.9961C78.9046 48.4516 82.932 43.8991 84.3728 41.3439C84.6496 40.8529 84.2104 40.3421 83.6592 40.4602C82.3228 40.7467 80.4338 41.1487 78.5091 41.5514C77.8129 41.6971 77.3231 40.8423 77.7727 40.2912C81.4261 35.8134 83.2326 31.3025 83.9078 28.6805C84.0493 28.1308 83.5086 27.7025 82.9905 27.9342C81.5745 28.5677 79.2768 29.6435 76.3482 31.125C75.7146 31.4455 75.0146 30.7566 75.3054 30.1088C78.6669 22.6204 79.0828 16.2155 78.7663 12.905C78.7119 12.3354 78.0522 12.1146 77.6426 12.5142C73.9853 16.0816 61.5197 28.3901 32.8283 56.994C32.5175 57.3038 31.994 57.281 31.7453 56.9195C27.17 50.2684 31.7646 44.3282 35.2747 41.6805C35.6433 41.4025 35.7002 40.8592 35.3751 40.5314Z M34.441 46.1547C33.6845 47.144 33.3253 48.3567 33.1761 49.3712C33.0838 49.9987 33.794 50.27 34.2236 49.8035L37.3603 46.3979C36.9143 45.6276 35.7061 44.5004 34.441 46.1547Z"></path>
+            </svg>
+          </a>
+          <p class="footer-tagline">A card that makes money for you. Spend globally, own where you tap.</p>
+        </div>
+        <div class="footer-links-group">
+          <div class="footer-col">
+            <span class="footer-col-title">Product</span>
+            <a href="#home">Card</a>
+            <a href="#spend-globally">Spend</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#the-cards">Editions</a>
+            <a href="#the-market">The Market</a>
+            <a href="#faq">FAQ</a>
+          </div>
+          <div class="footer-col">
+            <span class="footer-col-title">Merchants</span>
+            <a href="#for-businesses">For Businesses</a>
+            <a href="https://app.freedomnetwork.xyz/business" target="_blank" rel="noopener">List Your Shop</a>
+            <a href="https://exchange.freedomnetwork.xyz" target="_blank" rel="noopener">Freedom Exchange</a>
+          </div>
+          <div class="footer-col">
+            <span class="footer-col-title">Legal & Security</span>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Cardholder Agreement</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom scroll-reveal">
+        <p class="footer-legal">© 2026 Freedom Technologies Inc. All rights reserved. The Freedom Card is powered by Visa and issued by licensed banking partners worldwide.</p>
+      </div>
+    </div>
+  </footer>
+  <script>
+    (function initCurrencyStreamScroll() {
+      const section = document.querySelector('.section-currency-scroll');
+      const leftTrack = document.querySelector('.currency-track.is-left');
+      const rightTrack = document.querySelector('.currency-track.is-right');
+      const msg1 = document.querySelector('.currency-msg-box.msg-phase-1');
+      const msg2 = document.querySelector('.currency-msg-box.msg-phase-2');
+      const viewport = document.querySelector('.currency-sticky-viewport');
+
+      if (!section || !leftTrack || !rightTrack || !msg1 || !msg2) return;
+
+      const leftItems = Array.from(leftTrack.querySelectorAll('.currency-number-item'));
+      const rightItems = Array.from(rightTrack.querySelectorAll('.currency-number-item'));
+
+      let ambientOffset = 0;
+      let targetProgress = 0;
+      let currentProgress = 0;
+
+      function onScroll() {
+        const rect = section.getBoundingClientRect();
+        const scrollableDist = section.offsetHeight - window.innerHeight;
+        if (scrollableDist > 0) {
+          const raw = -rect.top / scrollableDist;
+          targetProgress = Math.min(Math.max(raw, 0), 1);
+        }
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+      onScroll();
+
+      const loopDist = 1200;
+      let vpH = window.innerHeight;
+      let vpCenter = vpH / 2;
+      let isMobile = window.innerWidth < 768;
+
+      function onResize() {
+        vpH = window.innerHeight;
+        vpCenter = vpH / 2;
+        isMobile = window.innerWidth < 768;
+        onScroll();
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onResize, { passive: true });
+      onScroll();
+
+      // Arc config – gentle curve matching moto-card, never collides with center text
+      const ARC_SCALE_MIN = 0.90;
+      const ARC_SCALE_MAX = 1.06;
+
+      function renderLoop() {
+        // Smooth lerp for scroll inertia
+        currentProgress += (targetProgress - currentProgress) * 0.12;
+        ambientOffset += 0.32;
+
+        const p = currentProgress;
+        const arcPush = isMobile ? 16 : 36;
+
+        // 1. Vertical motion — left column streams up, right streams down
+        const leftY = -((p * 950 + ambientOffset) % loopDist);
+        const rightY = -(((1 - p) * 950 + ambientOffset * 0.85) % loopDist);
+
+        // Apply vertical translation to entire tracks (no horizontal shift on the track itself)
+        leftTrack.style.transform = `translate3d(0, ${leftY.toFixed(1)}px, 0)`;
+        rightTrack.style.transform = `translate3d(0, ${rightY.toFixed(1)}px, 0)`;
+
+        // 2. Per-item ARC effect – items near viewport center gently curve inward + slight scale
+        const viewportRect = viewport ? viewport.getBoundingClientRect() : { top: 0 };
+        const viewportTop = viewportRect.top;
+
+        leftItems.forEach((item) => {
+          const rect = item.getBoundingClientRect();
+          const itemCenterY = rect.top + rect.height / 2 - viewportTop;
+          // Normalize: 0 at viewport center, 1 at top/bottom edges
+          const distFromCenter = Math.abs(itemCenterY - vpCenter) / vpCenter;
+          const proximity = Math.max(0, 1 - distFromCenter); // 1 at center, 0 at edges
+          const smoothProx = proximity * proximity; // ease-in curve
+          // Left column: gentle push RIGHT (positive X) toward center
+          const pushX = smoothProx * arcPush;
+          const scale = ARC_SCALE_MIN + (ARC_SCALE_MAX - ARC_SCALE_MIN) * smoothProx;
+          item.style.transform = `translate3d(${pushX.toFixed(1)}px, 0, 0) scale(${scale.toFixed(3)})`;
+        });
+
+        rightItems.forEach((item) => {
+          const rect = item.getBoundingClientRect();
+          const itemCenterY = rect.top + rect.height / 2 - viewportTop;
+          const distFromCenter = Math.abs(itemCenterY - vpCenter) / vpCenter;
+          const proximity = Math.max(0, 1 - distFromCenter);
+          const smoothProx = proximity * proximity;
+          // Right column: gentle push LEFT (negative X) toward center
+          const pushX = -(smoothProx * arcPush);
+          const scale = ARC_SCALE_MIN + (ARC_SCALE_MAX - ARC_SCALE_MIN) * smoothProx;
+          item.style.transform = `translate3d(${pushX.toFixed(1)}px, 0, 0) scale(${scale.toFixed(3)})`;
+        });
+
+        // 3. Text crossfade: Phase 1 -> Phase 2 (expanding & scaling up while dissolving upward)
+        if (p < 0.18) {
+          msg1.style.opacity = '1';
+          msg1.style.transform = 'translate3d(0, 0, 0) scale(1)';
+          msg1.style.filter = 'blur(0px)';
+
+          msg2.style.opacity = '0';
+          msg2.style.transform = 'translate3d(0, 48px, 0) scale(0.92)';
+          msg2.style.filter = 'blur(12px)';
+        } else if (p <= 0.36) {
+          const t = (p - 0.18) / 0.18; // 0..1
+          const op1 = Math.max(0, 1 - t * 1.3);
+          const sc1 = 1 + t * 0.08;
+          msg1.style.opacity = op1.toFixed(3);
+          msg1.style.transform = `translate3d(0, ${(-t * 48).toFixed(1)}px, 0) scale(${sc1.toFixed(3)})`;
+          msg1.style.filter = `blur(${(t * 12).toFixed(1)}px)`;
+
+          const t2 = Math.max(0, (t - 0.15) / 0.85);
+          const op2 = Math.min(1, t2 * 1.3);
+          const sc2 = 0.92 + t2 * 0.08;
+          msg2.style.opacity = op2.toFixed(3);
+          msg2.style.transform = `translate3d(0, ${((1 - t2) * 48).toFixed(1)}px, 0) scale(${sc2.toFixed(3)})`;
+          msg2.style.filter = `blur(${((1 - t2) * 12).toFixed(1)}px)`;
+        } else {
+          msg1.style.opacity = '0';
+          msg1.style.transform = 'translate3d(0, -48px, 0) scale(1.08)';
+          msg1.style.filter = 'blur(12px)';
+
+          msg2.style.opacity = '1';
+          msg2.style.transform = 'translate3d(0, 0, 0) scale(1)';
+          msg2.style.filter = 'blur(0px)';
+        }
+
+        requestAnimationFrame(renderLoop);
+      }
+
+      requestAnimationFrame(renderLoop);
+    })();
+
+    /* ================= HOW IT WORKS PINNED DISSOLVE ENGINE ================= */
+    (function initHowItWorksDissolveEngine() {
+      const section = document.querySelector('.section-how-pinned');
+      if (!section) return;
+
+      const panes = Array.from(section.querySelectorAll('.step-pane'));
+      if (!panes.length) return;
+
+      const stepControllers = panes.map((pane, index) => {
+        const stage1 = pane.querySelector('.step-stage-1');
+        const stage1Img = pane.querySelector('.step-stage1-img');
+        const stage2 = pane.querySelector('.step-stage-2');
+        const medallion = pane.querySelector('.step-medallion-container');
+        const leftLines = Array.from(pane.querySelectorAll('.step-line.is-left'));
+        const rightLines = Array.from(pane.querySelectorAll('.step-line.is-right'));
+        const numLines = Math.min(leftLines.length, rightLines.length);
+
+        return {
+          pane,
+          stage1,
+          stage1Img,
+          stage2,
+          medallion,
+          leftLines,
+          rightLines,
+          numLines,
+          index
+        };
+      });
+
+      let targetProgress = 0;
+      let currentProgress = 0;
+
+      function onScroll() {
+        const rect = section.getBoundingClientRect();
+        const scrollableDist = section.offsetHeight - window.innerHeight;
+        if (scrollableDist > 0) {
+          const raw = -rect.top / scrollableDist;
+          targetProgress = Math.min(Math.max(raw, 0), 1);
+        }
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+      onScroll();
+
+      // Timeline windows for dissolving between steps:
+      // Step 1: active 0.00 -> 0.28, dissolves out into Step 2 between 0.28 and 0.36
+      // Step 2: dissolves in 0.28 -> 0.36, active 0.36 -> 0.62, dissolves out into Step 3 between 0.62 and 0.70
+      // Step 3: dissolves in 0.62 -> 0.70, active 0.70 -> 0.98, stays settled through 1.00
+      const windows = [
+        { enterStart: 0.00, enterEnd: 0.00, exitStart: 0.28, exitEnd: 0.36 },
+        { enterStart: 0.28, enterEnd: 0.36, exitStart: 0.62, exitEnd: 0.70 },
+        { enterStart: 0.62, enterEnd: 0.70, exitStart: 1.00, exitEnd: 1.00 }
+      ];
+
+      function renderLoop() {
+        currentProgress += (targetProgress - currentProgress) * 0.12;
+        const p = currentProgress;
+
+        stepControllers.forEach((ctrl, i) => {
+          const w = windows[i];
+          let paneOpacity = 0;
+          let paneTranslateY = 0;
+          let paneScale = 1;
+
+          // 1. Calculate Pane Dissolve Opacity & Transform (expanding & scaling up while dissolving upward)
+          if (p < w.enterStart) {
+            paneOpacity = 0;
+            paneTranslateY = 36;
+            paneScale = 0.92;
+          } else if (p < w.enterEnd) {
+            // Dissolving in: expanding up from 0.92 to 1.0 while rising
+            const t = (p - w.enterStart) / (w.enterEnd - w.enterStart);
+            const easeT = t * t * (3 - 2 * t);
+            paneOpacity = easeT;
+            paneTranslateY = (1 - easeT) * 36;
+            paneScale = 0.92 + 0.08 * easeT;
+          } else if (p <= w.exitStart) {
+            // Fully active
+            paneOpacity = 1;
+            paneTranslateY = 0;
+            paneScale = 1;
+          } else if (p < w.exitEnd) {
+            // Dissolving out into next step: expands up to 1.06 while dissolving upward
+            const t = (p - w.exitStart) / (w.exitEnd - w.exitStart);
+            const easeT = t * t * (3 - 2 * t);
+            paneOpacity = 1 - easeT;
+            paneTranslateY = -easeT * 36;
+            paneScale = 1 + 0.06 * easeT;
+          } else {
+            paneOpacity = 0;
+            paneTranslateY = -36;
+            paneScale = 1.06;
+          }
+
+          const paneBlur = paneOpacity < 0.99 ? ((1 - paneOpacity) * 10).toFixed(1) : 0;
+          ctrl.pane.style.opacity = paneOpacity.toFixed(3);
+          ctrl.pane.style.transform = `translate3d(0, ${paneTranslateY.toFixed(1)}px, 0) scale(${paneScale.toFixed(3)})`;
+          ctrl.pane.style.filter = `blur(${paneBlur}px)`;
+          ctrl.pane.style.pointerEvents = paneOpacity > 0.5 ? 'auto' : 'none';
+
+          if (paneOpacity <= 0.001) return; // Skip sub-animations if completely invisible
+
+          // 2. Local step animation (Stage 1 -> Stage 2 -> Kinetic Scrub)
+          const localTotal = w.exitStart - w.enterStart;
+          const localP = Math.min(1, Math.max(0, (p - w.enterStart) / localTotal));
+
+          // Stage 1 vs Stage 2 Transition (scale & dissolve upward)
+          if (ctrl.stage1 && ctrl.stage2) {
+            if (localP < 0.22) {
+              ctrl.stage1.style.opacity = '1';
+              ctrl.stage1.style.transform = 'translate3d(0, 0, 0) scale(1)';
+              ctrl.stage1.style.filter = 'blur(0px)';
+              ctrl.stage2.style.opacity = '0';
+              ctrl.stage2.style.transform = 'translate3d(0, 24px, 0) scale(0.92)';
+              ctrl.stage2.style.filter = 'blur(8px)';
+            } else if (localP <= 0.34) {
+              const t = (localP - 0.22) / 0.12;
+              const easeT = t * t * (3 - 2 * t);
+              const sc1 = 1 + easeT * 0.06;
+              ctrl.stage1.style.opacity = Math.max(0, 1 - easeT * 1.2).toFixed(3);
+              ctrl.stage1.style.transform = `translate3d(0, ${(-easeT * 30).toFixed(1)}px, 0) scale(${sc1.toFixed(3)})`;
+              ctrl.stage1.style.filter = `blur(${(easeT * 8).toFixed(1)}px)`;
+
+              const t2 = Math.max(0, (t - 0.25) / 0.75);
+              const easeT2 = t2 * t2 * (3 - 2 * t2);
+              const sc2 = 0.92 + easeT2 * 0.08;
+              ctrl.stage2.style.opacity = Math.min(1, easeT2 * 1.1).toFixed(3);
+              ctrl.stage2.style.transform = `translate3d(0, ${((1 - easeT2) * 24).toFixed(1)}px, 0) scale(${sc2.toFixed(3)})`;
+              ctrl.stage2.style.filter = `blur(${((1 - easeT2) * 8).toFixed(1)}px)`;
+            } else {
+              ctrl.stage1.style.opacity = '0';
+              ctrl.stage1.style.transform = 'translate3d(0, -30px, 0) scale(1.06)';
+              ctrl.stage1.style.filter = 'blur(8px)';
+              ctrl.stage2.style.opacity = '1';
+              ctrl.stage2.style.transform = 'translate3d(0, 0, 0) scale(1)';
+              ctrl.stage2.style.filter = 'blur(0px)';
+            }
+          }
+
+          // Medallion Subtle Motion
+          if (ctrl.medallion && localP >= 0.22) {
+            const rot = (localP * 24).toFixed(2);
+            const sc = (0.95 + localP * 0.08).toFixed(3);
+            ctrl.medallion.style.transform = `translate(-50%, -50%) rotate(${rot}deg) scale(${sc})`;
+          }
+
+          // Kinetic Dual-Column Typography Scrub
+          const scrubStart = 0.34;
+          const scrubEnd = 0.92;
+          const scrubP = Math.min(1, Math.max(0, (localP - scrubStart) / (scrubEnd - scrubStart)));
+
+          const stepDuration = 0.24;
+          const travelSpan = 1 - stepDuration;
+
+          for (let k = 0; k < ctrl.numLines; k++) {
+            const itemStart = (k / Math.max(1, ctrl.numLines - 1)) * travelSpan;
+            const itemEnd = itemStart + stepDuration;
+
+            const rEl = ctrl.rightLines[k];
+            const lEl = ctrl.leftLines[k];
+            if (!rEl || !lEl) continue;
+
+            if (scrubP < itemStart) {
+              rEl.style.transform = 'scale(1) translate3d(0, 0, 0)';
+              rEl.style.opacity = '1';
+              lEl.style.transform = 'scale(0) translate3d(0, 0, 0)';
+              lEl.style.opacity = '0';
+            } else if (scrubP <= itemEnd) {
+              const rawK = (scrubP - itemStart) / stepDuration;
+              const easeK = rawK * rawK * (3 - 2 * rawK);
+
+              const scaleR = Math.max(0, 1 - easeK);
+              const opR = Math.max(0, 1 - easeK * 1.15);
+              rEl.style.transform = `scale(${scaleR.toFixed(3)}) translate3d(0, ${(easeK * 12).toFixed(1)}px, 0)`;
+              rEl.style.opacity = opR.toFixed(3);
+
+              const scaleL = Math.max(0, easeK);
+              const opL = Math.min(1, easeK * 1.3);
+              lEl.style.transform = `scale(${scaleL.toFixed(3)}) translate3d(0, ${((1 - easeK) * -12).toFixed(1)}px, 0)`;
+              lEl.style.opacity = opL.toFixed(3);
+            } else {
+              rEl.style.transform = 'scale(0) translate3d(0, 12px, 0)';
+              rEl.style.opacity = '0';
+              lEl.style.transform = 'scale(1) translate3d(0, 0, 0)';
+              lEl.style.opacity = '0.9';
+            }
+          }
+        });
+
+        requestAnimationFrame(renderLoop);
+      }
+
+      requestAnimationFrame(renderLoop);
+
+    })();
+  </script>
+
+  <!-- Cards Cinematic Auto-Loop Pan Controller -->
+  <script>
+    (function initCardsAutoLoopPan() {
+      const section = document.getElementById('the-cards');
+      if (!section) return;
+
+      const track = document.getElementById('cardsPanTrack');
+      if (!track) return;
+
+      const frames = Array.from(section.querySelectorAll('.cards-pan-frame'));
+      const nameWrap = document.getElementById('edNameWrap');
+      const nameEl = document.getElementById('edName');
+      const descEl = document.getElementById('edDesc');
+      const countEl = document.getElementById('edCount');
+      const pills = Array.from(section.querySelectorAll('.cards-ed-pill'));
+
+      const editions = [
+        { name: 'Checker Edition', desc: 'Black, white, and one red square. The one people ask about.' },
+        { name: 'Classic', desc: 'Red through and through. The everyday card.' },
+        { name: 'Premium', desc: 'Black on black. Just the mark.' }
+      ];
+
+      // Track has 4 frames: 0: Checker, 1: Classic, 2: Premium, 3: Checker (clone)
+      let currentTrackIndex = 0;
+      let isTransitioning = false;
+      const AUTO_DURATION = 2400; // 2.4s per edition for responsive, active pacing
+      let autoTimer = null;
+
+      function updateActiveUI(displayIndex) {
+        // Typography animation
+        if (nameWrap && descEl) {
+          nameWrap.classList.remove('is-visible');
+          descEl.classList.remove('is-visible');
+
+          setTimeout(() => {
+            if (nameEl) nameEl.textContent = editions[displayIndex].name;
+            if (descEl) descEl.textContent = editions[displayIndex].desc;
+            if (countEl) countEl.textContent = String(displayIndex + 1).padStart(2, '0');
+
+            void nameWrap.offsetWidth; // Reflow
+            nameWrap.classList.add('is-visible');
+            descEl.classList.add('is-visible');
+          }, 150);
+        }
+
+        // Pill tabs active state
+        pills.forEach((pill, i) => {
+          const isActive = i === displayIndex;
+          pill.classList.toggle('is-active', isActive);
+          pill.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+      }
+
+      function goToTrackIndex(targetTrackIndex, animate = true) {
+        isTransitioning = true;
+        currentTrackIndex = targetTrackIndex;
+        const displayIndex = currentTrackIndex % 3;
+
+        // Active frame class for zoom drift
+        frames.forEach((frame, i) => {
+          frame.classList.toggle('is-active', i === currentTrackIndex);
+        });
+
+        // Update text, counter, and pills
+        updateActiveUI(displayIndex);
+
+        // Pan track horizontally
+        const vw = window.innerWidth;
+        if (!animate) {
+          track.style.transition = 'none';
+        } else {
+          track.style.transition = 'transform 0.6s cubic-bezier(0.2, 0.9, 0.3, 1)';
+        }
+        track.style.transform = `translate3d(${-currentTrackIndex * vw}px, 0, 0)`;
+
+        // Handle infinite wrap when reaching clone (index 3)
+        if (currentTrackIndex === 3) {
+          setTimeout(() => {
+            // Silently snap back to frame 0 without animation
+            track.style.transition = 'none';
+            currentTrackIndex = 0;
+            track.style.transform = 'translate3d(0, 0, 0)';
+            frames.forEach((frame, i) => {
+              frame.classList.toggle('is-active', i === 0);
+            });
+            void track.offsetWidth; // Force reflow
+            isTransitioning = false;
+          }, 620);
+        } else {
+          setTimeout(() => {
+            isTransitioning = false;
+          }, 620);
+        }
+
+        startAutoProgress();
+      }
+
+      function startAutoProgress() {
+        clearTimeout(autoTimer);
+
+        // Reset progress bar on all pills
+        pills.forEach((p) => {
+          const bar = p.querySelector('.cards-ed-pill-progress');
+          if (bar) {
+            bar.style.transition = 'none';
+            bar.style.width = '0%';
+          }
+        });
+
+        const activeDisplayIndex = currentTrackIndex % 3;
+        const activeBar = pills[activeDisplayIndex] ? pills[activeDisplayIndex].querySelector('.cards-ed-pill-progress') : null;
+        if (activeBar) {
+          void activeBar.offsetWidth; // Force reflow
+          activeBar.style.transition = `width ${AUTO_DURATION}ms linear`;
+          activeBar.style.width = '100%';
+        }
+
+        // Automatic continuous loop without touching
+        autoTimer = setTimeout(() => {
+          advanceNext();
+        }, AUTO_DURATION);
+      }
+
+      function advanceNext() {
+        if (isTransitioning) return;
+        goToTrackIndex(currentTrackIndex + 1, true);
+      }
+
+      // Pill clicks allow user to quickly jump to any edition
+      pills.forEach((pill) => {
+        pill.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const target = parseInt(pill.dataset.index, 10);
+          goToTrackIndex(target, true);
+        });
+      });
+
+      // Keyboard left/right arrows
+      window.addEventListener('keydown', (e) => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          if (e.key === 'ArrowRight') {
+            advanceNext();
+          } else if (e.key === 'ArrowLeft') {
+            const prev = (currentTrackIndex - 1 + 3) % 3;
+            goToTrackIndex(prev, true);
+          }
+        }
+      });
+
+      // Window resize handling: keep current track aligned
+      window.addEventListener('resize', () => {
+        const vw = window.innerWidth;
+        track.style.transition = 'none';
+        track.style.transform = `translate3d(${-currentTrackIndex * vw}px, 0, 0)`;
+      }, { passive: true });
+
+      // Start automatically on load
+      goToTrackIndex(0, false);
+    })();
+  </script>
+
+  <!-- ================= GLOBAL EDITORIAL SCROLL ANIMATION CONTROLLER ================= -->
+  <script>
+    (function initGlobalScrollAnimations() {
+      // 1. Top Reading Progress Bar
+      const progressBar = document.getElementById('globalScrollProgress');
+      const navbar = document.querySelector('.navbar');
+      const navLinks = Array.from(document.querySelectorAll('.navbar .nav-link'));
+
+      // Section mappings for scrollspy
+      const sections = [
+        { id: 'how-it-works', el: document.getElementById('how-it-works') },
+        { id: 'the-cards', el: document.getElementById('the-cards') },
+        { id: 'for-businesses', el: document.getElementById('for-businesses') },
+        { id: 'the-market', el: document.getElementById('the-market') },
+        { id: 'faq', el: document.getElementById('faq') }
+      ].filter(s => s.el !== null);
+
+      // Hero Elements for Fade/Parallax
+      const heroBody = document.querySelector('.hero-body');
+
+      // Bento Parallax Images
+      const parallaxImages = Array.from(document.querySelectorAll('.biz-tall-img, .biz-card-img, .biz-chess-img, .biz-wide-img'));
+
+      function onGlobalScroll() {
+        const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        
+        // Update top progress bar
+        if (progressBar && maxScroll > 0) {
+          const progress = Math.min(1, Math.max(0, scrollY / maxScroll));
+          progressBar.style.transform = `scaleX(${progress})`;
+        }
+
+        // Sticky Navbar frosted glass state
+        if (navbar) {
+          if (scrollY > 40) {
+            navbar.classList.add('is-scrolled');
+          } else {
+            navbar.classList.remove('is-scrolled');
+          }
+        }
+
+        // Hero exit: expands & scales up while dissolving upward and softly blurring as user scrolls
+        if (heroBody) {
+          if (scrollY < 900) {
+            const ratio = Math.min(1, Math.max(0, scrollY / 600));
+            const sc = 1 + ratio * 0.08;
+            const transY = -ratio * 72;
+            const blur = ratio * 6;
+            const op = Math.max(0, 1 - ratio * 1.35);
+            heroBody.style.transform = `translate3d(-50%, ${transY.toFixed(1)}px, 0) scale(${sc.toFixed(3)})`;
+            heroBody.style.opacity = op.toFixed(3);
+            heroBody.style.filter = blur > 0.1 ? `blur(${blur.toFixed(1)}px)` : 'none';
+          } else {
+            heroBody.style.opacity = '0';
+          }
+        }
+
+        // Active Section Scrollspy
+        const scrollMid = scrollY + window.innerHeight * 0.35;
+        let currentSectionId = '';
+        for (let i = sections.length - 1; i >= 0; i--) {
+          const sec = sections[i];
+          const top = sec.el.offsetTop;
+          if (scrollMid >= top) {
+            currentSectionId = sec.id;
+            break;
+          }
+        }
+
+        if (currentSectionId) {
+          navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href === `#${currentSectionId}`) {
+              link.classList.add('is-active');
+            } else if (href && href.startsWith('#')) {
+              link.classList.remove('is-active');
+            }
+          });
+        }
+
+        // Bento images subtle parallax
+        if (parallaxImages.length) {
+          const vh = window.innerHeight;
+          parallaxImages.forEach(img => {
+            const parent = img.parentElement;
+            if (!parent) return;
+            const rect = parent.getBoundingClientRect();
+            if (rect.top < vh && rect.bottom > 0) {
+              const centerOffset = (rect.top + rect.height / 2 - vh / 2) / vh;
+              // Gentle range: -18px to +18px
+              const translateY = Math.max(-20, Math.min(20, centerOffset * 24));
+              img.style.transform = `scale(1.08) translate3d(0, ${translateY.toFixed(1)}px, 0)`;
+            }
+          });
+        }
+      }
+
+      window.addEventListener('scroll', onGlobalScroll, { passive: true });
+      window.addEventListener('resize', onGlobalScroll, { passive: true });
+      onGlobalScroll();
+
+      // 2. High-Performance IntersectionObserver for Scroll Reveals
+      const revealElements = Array.from(document.querySelectorAll('.scroll-reveal, .scroll-reveal-stagger, .scroll-reveal-expand'));
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-revealed');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.02,
+          rootMargin: '0px 0px 40px 0px'
+        });
+
+        revealElements.forEach(el => observer.observe(el));
+      } else {
+        // Fallback: immediately reveal all
+        revealElements.forEach(el => el.classList.add('is-revealed'));
+      }
+
+      // 3. Smooth Anchor Click Navigation with Offset
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const targetId = this.getAttribute('href');
+          if (!targetId || targetId === '#') return;
+          const targetEl = document.querySelector(targetId);
+          if (targetEl) {
+            e.preventDefault();
+            const navHeight = navbar ? navbar.offsetHeight : 64;
+            const targetPos = targetEl.getBoundingClientRect().top + window.pageYOffset - (navHeight - 8);
+            window.scrollTo({
+              top: Math.max(0, targetPos),
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+    })();
+  </script>
+
+  <!-- Mobile Navigation Drawer Controller -->
+  <script>
+    (function initMobileNavDrawer() {
+      const hamburger = document.getElementById('navHamburger');
+      const drawer = document.getElementById('mobileNavDrawer');
+      const backdrop = document.getElementById('mobileNavBackdrop');
+      if (!hamburger || !drawer) return;
+
+      const links = drawer.querySelectorAll('.mobile-nav-link, .mobile-nav-cta, .mobile-nav-sublink');
+
+      function openDrawer() {
+        hamburger.classList.add('is-active');
+        hamburger.setAttribute('aria-expanded', 'true');
+        drawer.classList.add('is-open');
+        drawer.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('mobile-nav-locked');
+      }
+
+      function closeDrawer() {
+        hamburger.classList.remove('is-active');
+        hamburger.setAttribute('aria-expanded', 'false');
+        drawer.classList.remove('is-open');
+        drawer.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('mobile-nav-locked');
+      }
+
+      function toggleDrawer() {
+        const isOpen = drawer.classList.contains('is-open');
+        if (isOpen) {
+          closeDrawer();
+        } else {
+          openDrawer();
+        }
+      }
+
+      hamburger.addEventListener('click', toggleDrawer);
+      if (backdrop) {
+        backdrop.addEventListener('click', closeDrawer);
+      }
+
+      links.forEach(link => {
+        link.addEventListener('click', () => {
+          closeDrawer();
+        });
+      });
+
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && drawer.classList.contains('is-open')) {
+          closeDrawer();
+        }
+      });
+    })();
+  </script>
+
+  <!-- Coinbase Market Update Controller -->
+  <script>
+    (function initCoinbaseMarket() {
+      const heroLabel = document.getElementById('cb-hero-label');
+      const heroVal = document.getElementById('cb-hero-val');
+      const heroChange = document.getElementById('cb-hero-change');
+      const maskPath = document.getElementById('cb-mask-path');
+      const linePath = document.getElementById('cb-line-path');
+      const dotCircle = document.getElementById('cb-dot-circle');
+      const volVal = document.getElementById('cb-vol-val');
+      const volChange = document.getElementById('cb-vol-change');
+      const buyVal = document.getElementById('cb-buy-val');
+      const buyChange = document.getElementById('cb-buy-change');
+      const shopCards = document.querySelectorAll('.cb-shop-card');
+
+      if (!heroVal || !shopCards.length) return;
+
+      const data = {
+        default: {
+          label: 'Market cap',
+          val: '₦1.12B',
+          pct: '14.8%',
+          trend: 'up',
+          line: 'M 0,80 Q 25,95 50,75 T 100,55 T 150,70 T 200,45 T 250,55 T 290,25 T 320,15',
+          mask: 'M 0,80 Q 25,95 50,75 T 100,55 T 150,70 T 200,45 T 250,55 T 290,25 T 320,15 L 320,120 L 0,120 Z',
+          vol: '₦84.6M',
+          volPct: '4.2%',
+          volTrend: 'down',
+          buy: '82% buy',
+          buyPct: '1.15%',
+          buyTrend: 'up'
+        },
+        probekit: {
+          label: 'Probe Kitchens cap',
+          val: '₦320m',
+          pct: '14.80%',
+          trend: 'up',
+          line: 'M 0,85 Q 30,90 60,70 T 120,60 T 180,45 T 240,30 T 320,18',
+          mask: 'M 0,85 Q 30,90 60,70 T 120,60 T 180,45 T 240,30 T 320,18 L 320,120 L 0,120 Z',
+          vol: '₦28.4M',
+          volPct: '6.5%',
+          volTrend: 'up',
+          buy: '86% buy',
+          buyPct: '2.1%',
+          buyTrend: 'up'
+        },
+        blaze: {
+          label: 'BLAZE market cap',
+          val: '₦225m',
+          pct: '8.20%',
+          trend: 'up',
+          line: 'M 0,75 Q 35,80 70,72 T 140,58 T 210,65 T 270,35 T 320,28',
+          mask: 'M 0,75 Q 35,80 70,72 T 140,58 T 210,65 T 270,35 T 320,28 L 320,120 L 0,120 Z',
+          vol: '₦19.2M',
+          volPct: '1.8%',
+          volTrend: 'down',
+          buy: '74% buy',
+          buyPct: '0.9%',
+          buyTrend: 'up'
+        },
+        tsionark: {
+          label: 'TSION ARK cap',
+          val: '₦22m',
+          pct: '21.50%',
+          trend: 'up',
+          line: 'M 0,95 Q 40,90 80,75 T 160,50 T 220,35 T 280,18 T 320,10',
+          mask: 'M 0,95 Q 40,90 80,75 T 160,50 T 220,35 T 280,18 T 320,10 L 320,120 L 0,120 Z',
+          vol: '₦4.8M',
+          volPct: '15.2%',
+          volTrend: 'up',
+          buy: '91% buy',
+          buyPct: '4.2%',
+          buyTrend: 'up'
+        },
+        melite: {
+          label: 'Maison Élite cap',
+          val: '₦150m',
+          pct: '3.40%',
+          trend: 'down',
+          line: 'M 0,35 Q 40,30 80,45 T 160,60 T 230,55 T 280,75 T 320,82',
+          mask: 'M 0,35 Q 40,30 80,45 T 160,60 T 230,55 T 280,75 T 320,82 L 320,120 L 0,120 Z',
+          vol: '₦12.5M',
+          volPct: '5.1%',
+          volTrend: 'down',
+          buy: '68% buy',
+          buyPct: '1.4%',
+          buyTrend: 'down'
+        },
+        kover: {
+          label: 'Kover Studio cap',
+          val: '₦410m',
+          pct: '12.10%',
+          trend: 'up',
+          line: 'M 0,70 Q 30,75 70,60 T 130,50 T 200,42 T 260,25 T 320,16',
+          mask: 'M 0,70 Q 30,75 70,60 T 130,50 T 200,42 T 260,25 T 320,16 L 320,120 L 0,120 Z',
+          vol: '₦31.2M',
+          volPct: '8.4%',
+          volTrend: 'up',
+          buy: '88% buy',
+          buyPct: '3.0%',
+          buyTrend: 'up'
+        }
+      };
+
+      let activeKey = null;
+
+      function applyData(item) {
+        if (heroLabel) heroLabel.textContent = item.label;
+        if (heroVal) heroVal.textContent = item.val;
+        
+        const isUp = item.trend === 'up';
+        const color = isUp ? '#098551' : '#cf202f';
+        
+        if (heroChange) {
+          heroChange.className = 'cb-metric-change ' + item.trend;
+          const iconSvg = isUp
+            ? '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg>'
+            : '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 2.5L9.5 9.5M9.5 9.5H4.5M9.5 9.5V4.5"/></svg>';
+          heroChange.innerHTML = iconSvg + '<span id="cb-hero-pct">' + item.pct + '</span>';
+        }
+
+        if (linePath) {
+          linePath.setAttribute('d', item.line);
+          linePath.setAttribute('stroke', color);
+        }
+        if (maskPath) maskPath.setAttribute('d', item.mask);
+        if (dotCircle) dotCircle.setAttribute('fill', color);
+
+        // Volume
+        if (volVal) volVal.textContent = item.vol;
+        if (volChange) {
+          volChange.className = 'cb-metric-change ' + item.volTrend;
+          const volIsUp = item.volTrend === 'up';
+          const volSvg = volIsUp
+            ? '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg>'
+            : '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 2.5L9.5 9.5M9.5 9.5H4.5M9.5 9.5V4.5"/></svg>';
+          volChange.innerHTML = volSvg + '<span id="cb-vol-pct">' + item.volPct + '</span>';
+        }
+
+        // Buy ratio
+        if (buyVal) buyVal.textContent = item.buy;
+        if (buyChange) {
+          buyChange.className = 'cb-metric-change ' + item.buyTrend;
+          const buyIsUp = item.buyTrend === 'up';
+          const buySvg = buyIsUp
+            ? '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5"/></svg>'
+            : '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 2.5L9.5 9.5M9.5 9.5H4.5M9.5 9.5V4.5"/></svg>';
+          buyChange.innerHTML = buySvg + '<span id="cb-buy-pct">' + item.buyPct + '</span>';
+        }
+      }
+
+      shopCards.forEach(card => {
+        const handleSelect = () => {
+          const key = card.getAttribute('data-key');
+          if (activeKey === key) {
+            activeKey = null;
+            shopCards.forEach(c => c.classList.remove('active'));
+            applyData(data.default);
+          } else {
+            activeKey = key;
+            shopCards.forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+            if (data[key]) applyData(data[key]);
+          }
+        };
+
+        card.addEventListener('click', handleSelect);
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleSelect();
+          }
+        });
+      });
+
+      const heroCard = document.getElementById('cb-hero-card');
+      if (heroCard) {
+        heroCard.addEventListener('click', () => {
+          activeKey = null;
+          shopCards.forEach(c => c.classList.remove('active'));
+          applyData(data.default);
+        });
+      }
+    })();
+  </script>
+
+</body>
+</html>
+
