@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Freedom Cards</title>
+<style>
+  :root { --bg:#0b0b0d; --panel:#16161a; --line:#26262c; --text:#f4f4f5; --muted:#8b8b95; --accent:#e8c872; }
+  * { box-sizing:border-box; margin:0; }
+  body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",sans-serif; min-height:100vh; }
+  header { display:flex; align-items:center; justify-content:space-between; padding:24px 40px; border-bottom:1px solid var(--line); }
+  header h1 { font-size:18px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; }
+  header h1 span { color:var(--accent); }
+  .actions { display:flex; gap:10px; }
+  button, .btn { background:var(--panel); color:var(--text); border:1px solid var(--line); padding:10px 18px; border-radius:999px; font-size:14px; cursor:pointer; transition:.2s; }
+  button:hover, .btn:hover { border-color:var(--accent); }
+  .primary { background:var(--accent); color:#111; border-color:var(--accent); font-weight:600; }
+  main { max-width:1200px; margin:0 auto; padding:40px; }
+  #drop { border:1.5px dashed var(--line); border-radius:20px; padding:48px 20px; text-align:center; color:var(--muted); transition:.2s; margin-bottom:40px; cursor:pointer; }
+  #drop.over { border-color:var(--accent); color:var(--text); background:#15140f; }
+  #drop strong { color:var(--text); display:block; font-size:18px; margin-bottom:6px; }
+  #grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:24px; }
+  .card { position:relative; background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:16px; transition:.25s; cursor:zoom-in; }
+  .card:hover { transform:translateY(-4px); border-color:#3a3a42; box-shadow:0 20px 40px -20px #000; }
+  .card .img { aspect-ratio:16/10; display:flex; align-items:center; justify-content:center; }
+  .card img { max-width:100%; max-height:100%; object-fit:contain; border-radius:10px; }
+  .card input { width:100%; background:none; border:0; color:var(--text); text-align:center; font-size:14px; margin-top:12px; outline:none; font-family:inherit; }
+  .card input:focus { color:var(--accent); }
+  .del { position:absolute; top:10px; right:10px; width:28px; height:28px; padding:0; line-height:1; opacity:0; }
+  .card:hover .del { opacity:1; }
+  .empty { text-align:center; color:var(--muted); padding:40px 0; }
+  /* presentation */
+  #view { position:fixed; inset:0; background:#000; display:none; z-index:10; overflow:hidden; cursor:pointer; }
+  #view.on { display:block; }
+  #view.idle { cursor:none; }
+  .slide { position:absolute; inset:0; transform:translateX(100%); transition:transform .45s cubic-bezier(.65,0,.25,1); will-change:transform; }
+  .slide .bg { position:absolute; inset:-60px; background-size:cover; background-position:center; filter:blur(50px) brightness(.45) saturate(1.3); }
+  .slide .fg { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; transform:scale(1); }
+  .slide.show .fg { animation:drift 14s ease-out forwards; }
+  @keyframes drift { from { transform:scale(1); } to { transform:scale(1.04); } }
+  .slide.pan .fg { inset:auto; top:0; left:0; width:100%; height:auto; }
+  .slide.pan.show .fg { animation:pan 12s cubic-bezier(.45,0,.25,1) 1.2s forwards; }
+  @keyframes pan { from { transform:translateY(0); } to { transform:translateY(calc(var(--shift) * -1)); } }
+  .ui, .nav { transition:opacity .5s; }
+  #view.idle .ui, #view.idle .nav { opacity:0; pointer-events:none; }
+  #view button { background:rgba(0,0,0,.45); backdrop-filter:blur(10px); border-color:rgba(255,255,255,.15); }
+  .ui.top { position:absolute; top:24px; right:24px; display:flex; gap:10px; }
+  .ui.bottom { position:absolute; left:0; right:0; bottom:0; padding:80px 32px 28px; text-align:center; background:linear-gradient(transparent,rgba(0,0,0,.65)); pointer-events:none; }
+  .ui.bottom button { pointer-events:auto; }
+  .cap { font-size:18px; letter-spacing:.14em; text-transform:uppercase; }
+  .meta { display:flex; align-items:center; justify-content:center; gap:14px; margin-top:12px; color:var(--muted); font-size:13px; }
+  .nav { position:absolute; top:50%; transform:translateY(-50%); width:52px; height:52px; padding:0; font-size:24px; }
+  #prev { left:24px; } #next { right:24px; }
+  @media(max-width:600px){ header{padding:16px 20px} main{padding:20px} }
+</style>
+</head>
+<body>
+<header>
+  <h1>Freedom <span>Cards</span></h1>
+  <div class="actions">
+    <button id="clear">Clear all</button>
+    <button id="present" class="primary">▶ Present</button>
+  </div>
+</header>
+<main>
+  <div id="drop">
+    <strong>Drop your cards here</strong>
+    or click to browse · PNG, JPG, WebP, SVG
+  </div>
+  <input type="file" id="file" accept="image/*" multiple hidden>
+  <div id="grid"></div>
+  <p class="empty" id="empty">No cards yet.</p>
+</main>
+
+<div id="view">
+  <div class="slide"><div class="bg"></div><img class="fg" alt=""></div>
+  <div class="slide"><div class="bg"></div><img class="fg" alt=""></div>
+  <div class="ui top"><button id="fill" title="Tall images: Fit whole card / Fill width and pan (Z)">Fit</button><button id="full" title="Fullscreen (F)">⛶</button><button id="close">✕</button></div>
+  <button class="nav" id="prev">‹</button>
+  <button class="nav" id="next">›</button>
+  <div class="ui bottom">
+    <div class="cap" id="vcap"></div>
+    <div class="meta"><button id="play" title="Slideshow (Space)">▶</button><span id="vcount"></span></div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const KEY = 'freedom-cards';
+let cards = [];
+try { cards = JSON.parse(localStorage.getItem(KEY)) || []; } catch(e) {}
+let idx = 0;
+
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify(cards)); }
+  catch(e) { console.warn('Storage full — cards kept for this session only.'); }
+}
+
+function render() {
+  $('grid').innerHTML = '';
+  $('empty').style.display = cards.length ? 'none' : 'block';
+  cards.forEach((c, i) => {
+    const el = document.createElement('div');
+    el.className = 'card';
+    el.innerHTML = '<button class="del" title="Remove">✕</button><div class="img"><img></div>';
+    el.querySelector('img').src = c.src;
+    el.querySelector('.del').onclick = e => { e.stopPropagation(); cards.splice(i,1); save(); render(); };
+    el.onclick = () => open(i);
+    $('grid').appendChild(el);
+  });
+}
+
+function addFiles(files) {
+  [...files].filter(f => f.type.startsWith('image/')).forEach(f => {
+    const r = new FileReader();
+    r.onload = () => { cards.push({ name: f.name.replace(/\.[^.]+$/, ''), src: r.result }); save(); render(); };
+    r.readAsDataURL(f);
+  });
+}
+
+let layer = 0, hideT, playT, playing = false, fillMode = false;
+function open(i) {
+  if (!cards.length) return;
+  const wasOn = $('view').classList.contains('on');
+  const old = idx;
+  const animate = wasOn && i !== old;
+  const dir = i < old ? -1 : 1;
+  idx = (i + cards.length) % cards.length;
+  const slides = document.querySelectorAll('.slide');
+  const next = slides[layer ^ 1], cur = slides[layer];
+  const fg = next.querySelector('.fg');
+  next.classList.remove('pan'); void next.offsetWidth;
+  next.querySelector('.bg').style.backgroundImage = 'url("' + cards[idx].src + '")';
+  fg.src = cards[idx].src;
+  const apply = () => {
+    const tall = fg.naturalWidth / fg.naturalHeight < innerWidth / innerHeight;
+    if (!fillMode || !tall) return;
+    next.style.setProperty('--shift', Math.max(0, innerWidth * fg.naturalHeight / fg.naturalWidth - innerHeight) + 'px');
+    next.classList.add('pan');
+  };
+  if (fg.complete && fg.naturalWidth) apply(); else fg.onload = apply;
+  // place incoming slide off-screen (no transition), then slide both
+  next.style.transition = 'none';
+  next.style.transform = 'translateX(' + (animate ? dir * 100 : 0) + '%)';
+  void next.offsetWidth;
+  next.style.transition = '';
+  next.style.transform = 'translateX(0)';
+  cur.style.transition = animate ? '' : 'none';
+  cur.style.transform = 'translateX(' + (animate ? -dir * 100 : 100) + '%)';
+  next.classList.add('show'); cur.classList.remove('show');
+  layer ^= 1;
+  $('vcount').textContent = (idx+1) + ' / ' + cards.length;
+  $('view').classList.add('on');
+  wake();
+}
+function toggleFill() {
+  fillMode = !fillMode;
+  $('fill').textContent = fillMode ? 'Fill' : 'Fit';
+  open(idx);
+}
+function wake() {
+  $('view').classList.remove('idle');
+  clearTimeout(hideT);
+  hideT = setTimeout(() => $('view').classList.add('idle'), 2500);
+}
+function setPlay(on) {
+  playing = on; clearInterval(playT);
+  $('play').textContent = on ? '❚❚' : '▶';
+  if (on) playT = setInterval(() => open(idx+1), fillMode ? 10000 : 3500);
+}
+function fs() {
+  if (document.fullscreenElement) document.exitFullscreen();
+  else $('view').requestFullscreen?.().catch(()=>{});
+}
+function closeView() {
+  setPlay(false);
+  $('view').classList.remove('on');
+  document.querySelectorAll('.slide').forEach(s => s.classList.remove('show'));
+  if (document.fullscreenElement) document.exitFullscreen();
+}
+
+$('drop').onclick = () => $('file').click();
+$('file').onchange = e => { addFiles(e.target.files); e.target.value=''; };
+['dragover','dragenter'].forEach(ev => document.addEventListener(ev, e => { e.preventDefault(); $('drop').classList.add('over'); }));
+['dragleave','drop'].forEach(ev => document.addEventListener(ev, e => { e.preventDefault(); $('drop').classList.remove('over'); }));
+document.addEventListener('drop', e => addFiles(e.dataTransfer.files));
+
+$('present').onclick = () => { if (!cards.length) return; open(0); fs(); };
+$('clear').onclick = () => { if (cards.length && confirm('Remove all cards?')) { cards = []; save(); render(); } };
+$('close').onclick = closeView;
+$('prev').onclick = e => { e.stopPropagation(); open(idx-1); };
+$('next').onclick = e => { e.stopPropagation(); open(idx+1); };
+$('play').onclick = e => { e.stopPropagation(); setPlay(!playing); };
+$('full').onclick = e => { e.stopPropagation(); fs(); };
+$('fill').onclick = e => { e.stopPropagation(); toggleFill(); };
+$('view').addEventListener('mousemove', wake);
+$('view').addEventListener('click', e => {
+  if (e.target.closest('button')) return;
+  open(e.clientX < innerWidth / 2 ? idx-1 : idx+1);
+});
+let tx = null;
+$('view').addEventListener('touchstart', e => { tx = e.touches[0].clientX; wake(); });
+$('view').addEventListener('touchend', e => {
+  if (tx === null) return;
+  const d = e.changedTouches[0].clientX - tx; tx = null;
+  if (Math.abs(d) > 40) open(d < 0 ? idx+1 : idx-1);
+});
+document.addEventListener('keydown', e => {
+  if (!$('view').classList.contains('on')) return;
+  if (e.key === 'ArrowRight') open(idx+1);
+  if (e.key === 'ArrowLeft') open(idx-1);
+  if (e.key === ' ') { e.preventDefault(); setPlay(!playing); }
+  if (e.key === 'f' || e.key === 'F') fs();
+  if (e.key === 'z' || e.key === 'Z') toggleFill();
+  if (e.key === 'Escape') closeView();
+});
+render();
+</script>
+</body>
+</html>
