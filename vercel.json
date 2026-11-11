@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "missing": [
+        {
+          "type": "host",
+          "value": "freedomnetwork.xyz"
+        }
+      ],
+      "destination": "https://freedomnetwork.xyz/:path*",
+      "permanent": true
+    }
+  ]
+}
